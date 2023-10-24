@@ -40,9 +40,8 @@ const SignUp = ({ navigation }) => {
     return null;
   }
 
-  const handlerSignUp = () => {};
-  const handlerSignUpWithFacebook = () => {};
-  const handlerSignUpWithGoogle = () => {
+  const handlerSignUp = () => {
+    navigation.navigate("BottomTab");
     console.log(
       "Handler Sign Up with: Email." +
         email +
@@ -52,12 +51,14 @@ const SignUp = ({ navigation }) => {
         rememberUser
     );
   };
+  const handlerSignUpWithFacebook = () => {};
+  const handlerSignUpWithGoogle = () => {};
   const handlerSignUpWithApple = () => {};
 
   const isValidatedInput = () => {
     return (
       email.length >= 0 &&
-      password.length >= 0 &&
+      password.length >= 6 &&
       isValidEmail(email) == true &&
       isValidPassword(password) == true
     );

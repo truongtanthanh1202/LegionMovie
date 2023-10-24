@@ -40,9 +40,8 @@ const SignIn = ({ navigation }) => {
     return null;
   }
 
-  const handlerSignIn = () => {};
-  const handlerSignInWithFacebook = () => {};
-  const handlerSignInWithGoogle = () => {
+  const handlerSignIn = () => {
+    navigation.navigate("BottomTab");
     console.log(
       "Handler Sign In with: Email." +
         email +
@@ -52,7 +51,15 @@ const SignIn = ({ navigation }) => {
         rememberUser
     );
   };
+  const handlerSignInWithFacebook = () => {};
+  const handlerSignInWithGoogle = () => {};
   const handlerSignInWithApple = () => {};
+  const handlerToForgotPassword = () => {
+    navigation.navigate("Forgot1");
+  };
+  const handlerToSignUp = () => {
+    navigation.navigate("SignUp");
+  };
 
   const isValidatedInput = () => {
     return (
@@ -223,7 +230,10 @@ const SignIn = ({ navigation }) => {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={{ flexDirection: "row", marginTop: 8 }}>
+              <TouchableOpacity
+                style={{ flexDirection: "row", marginTop: 8 }}
+                onPress={handlerToForgotPassword}
+              >
                 <Text
                   style={{
                     fontFamily: "Urbanist_600SemiBold",
@@ -294,9 +304,7 @@ const SignIn = ({ navigation }) => {
 
               <TouchableOpacity
                 style={{ flexDirection: "row", marginTop: 28 }}
-                onPress={() => {
-                  navigation.navigate("SignUp");
-                }}
+                onPress={handlerToSignUp}
               >
                 <Text
                   style={{

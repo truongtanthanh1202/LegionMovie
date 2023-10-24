@@ -24,7 +24,7 @@ import {
 } from "@expo-google-fonts/urbanist";
 import ForgotPassword1 from "../../assets/svg/ForgotPassword1";
 
-const Forgot1 = () => {
+const Forgot1 = ({ navigation }) => {
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_600SemiBold,
     Urbanist_500Medium,
@@ -35,7 +35,9 @@ const Forgot1 = () => {
     return null;
   }
 
-  const handlerForgotPassword1 = () => {};
+  const handlerForgotPassword1 = () => {
+    navigation.navigate("Forgot2");
+  };
 
   return (
     <>
@@ -50,7 +52,11 @@ const Forgot1 = () => {
                 marginTop: 50,
               }}
             >
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
                 {/* <Ionicons name="arrow-back" size={28} color="white" /> */}
                 <Image
                   source={require("../../assets/icon/arrow-back-48.png")}

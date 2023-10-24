@@ -27,7 +27,7 @@ import {
 import ForgotPassword2 from "../../assets/svg/ForgotPassword2";
 import ForgotPassword3 from "../../assets/svg/ForgotPassword3";
 
-const Forgot3 = () => {
+const Forgot3 = ({ navigation }) => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -44,6 +44,10 @@ const Forgot3 = () => {
 
   const handlerCompleteResetPassword = () => {
     setModalVisible(true);
+  };
+
+  const handlerToHome = () => {
+    navigation.navigate("BottomTab");
   };
 
   return (
@@ -101,7 +105,10 @@ const Forgot3 = () => {
                   ) : (
                     <>
                       <TouchableOpacity
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() => {
+                          setModalVisible(!modalVisible);
+                          handlerToHome();
+                        }}
                         style={{
                           backgroundColor: Colors.primaryColorLight,
                           paddingVertical: 14,
@@ -139,7 +146,11 @@ const Forgot3 = () => {
                 marginTop: 50,
               }}
             >
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
                 {/* <Ionicons name="arrow-back" size={28} color="white" /> */}
                 <Image
                   source={require("../../assets/icon/arrow-back-48.png")}
@@ -158,7 +169,7 @@ const Forgot3 = () => {
                   marginLeft: 16,
                 }}
               >
-                Forgot Password
+                Reset Password
               </Text>
             </View>
             <View style={{ flex: 1 }}>
