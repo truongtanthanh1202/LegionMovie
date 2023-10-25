@@ -27,7 +27,7 @@ import {
 import RegisterVerified from "../../assets/svg/RegisterVerified";
 import { Dropdown } from "react-native-element-dropdown";
 
-const SetupProfile = () => {
+const SetupProfile = ({ navigation }) => {
   const [value, setValue] = React.useState(null);
   const [fullname, setFullname] = React.useState("");
   const [nickname, setNickname] = React.useState("");
@@ -48,18 +48,33 @@ const SetupProfile = () => {
     { label: "Unknown", value: "unknown" },
   ];
 
-  const handlerCompleteSetupAccount = () => {
-    setModalVisible(true);
-    console.log(
-      "full name: " + fullname + " nickname: " + nickname + " gender: " + value
-    );
+  const handlerCompleteSetupAccount = (action: string) => {
+    if (action === "continue") {
+      setModalVisible(true);
+      console.log(
+        "full name: " +
+          fullname +
+          " nickname: " +
+          nickname +
+          " gender: " +
+          value
+      );
+    }
+    if (action === "skip") {
+      setModalVisible(true);
+    }
   };
 
+  const handlerToHome = () => {
+    setModalVisible(false);
+    navigation.navigate("BottomTab");
+  };
   return (
     <>
       <KeyboardAvoidingView style={{ flex: 1, width: "100%" }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <SafeAreaView style={styles.container}>
+            {/* Modal show/hide */}
             <Modal
               animationType="slide"
               transparent={true}
@@ -110,7 +125,10 @@ const SetupProfile = () => {
                   ) : (
                     <>
                       <TouchableOpacity
-                        onPress={() => setModalVisible(!modalVisible)}
+                        onPress={() => {
+                          setModalVisible(!modalVisible);
+                          handlerToHome();
+                        }}
                         style={{
                           backgroundColor: Colors.primaryColorLight,
                           paddingVertical: 14,
@@ -140,6 +158,7 @@ const SetupProfile = () => {
               </View>
             </Modal>
 
+            {/* Header */}
             <View
               style={{
                 flexDirection: "row",
@@ -148,7 +167,11 @@ const SetupProfile = () => {
                 marginTop: 50,
               }}
             >
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.goBack();
+                }}
+              >
                 {/* <Ionicons name="arrow-back" size={28} color="white" /> */}
                 <Image
                   source={require("../../assets/icon/arrow-back-48.png")}
@@ -170,6 +193,8 @@ const SetupProfile = () => {
                 Fill your profile
               </Text>
             </View>
+
+            {/* Body */}
             <View style={{ flex: 1 }}>
               <View
                 style={{
@@ -309,7 +334,12 @@ const SetupProfile = () => {
                   bottom: 0,
                 }}
               >
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => {
+                    handlerCompleteSetupAccount("skip");
+                  }}
+                >
                   <Text
                     style={{
                       ...styles.textInButton,
@@ -324,7 +354,9 @@ const SetupProfile = () => {
                     ...styles.button,
                     backgroundColor: Colors.primaryColorLight,
                   }}
-                  onPress={handlerCompleteSetupAccount}
+                  onPress={() => {
+                    handlerCompleteSetupAccount("continue");
+                  }}
                 >
                   <Text
                     style={{

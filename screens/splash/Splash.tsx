@@ -4,9 +4,6 @@ import { Colors } from "../../constant/Color";
 import styles from "./Style";
 
 const Splash = ({ navigation }) => {
-  setTimeout(() => {
-    navigation.navigate("BottomTab");
-  }, 1000);
   return (
     <View style={styles.container}>
       <Image

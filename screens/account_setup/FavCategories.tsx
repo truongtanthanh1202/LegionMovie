@@ -20,7 +20,16 @@ import {
 } from "@expo-google-fonts/urbanist";
 import { CategoriesArray } from "../../constant/Constant";
 
-const FavCategories = () => {
+const FavCategories = ({ navigation }) => {
+  const handlerToSetupProfile = (action: string) => {
+    if (action === "skip") {
+      navigation.navigate("SetupProfile");
+    }
+    if (action === "continue") {
+      navigation.navigate("SetupProfile");
+    }
+  };
+
   const userFavCategory: string[] = [];
 
   const removerUserFavCategory = (unselectedCategory: string) => {
@@ -76,7 +85,11 @@ const FavCategories = () => {
           marginTop: 50,
         }}
       >
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
           {/* <Ionicons name="arrow-back" size={28} color="white" /> */}
           <Image
             source={require("../../assets/icon/arrow-back-48.png")}
@@ -140,7 +153,12 @@ const FavCategories = () => {
             bottom: 0,
           }}
         >
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handlerToSetupProfile("skip");
+            }}
+          >
             <Text
               style={{
                 ...styles.textInButton,
@@ -157,6 +175,7 @@ const FavCategories = () => {
             }}
             onPress={() => {
               console.log(userFavCategory);
+              handlerToSetupProfile("continue");
             }}
           >
             <Text

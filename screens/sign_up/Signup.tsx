@@ -41,7 +41,7 @@ const SignUp = ({ navigation }) => {
   }
 
   const handlerSignUp = () => {
-    navigation.navigate("BottomTab");
+    navigation.navigate("FavCategories");
     console.log(
       "Handler Sign Up with: Email." +
         email +
