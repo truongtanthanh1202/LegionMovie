@@ -76,3 +76,7 @@ export const fetchNewRealeaseMovies = () => {
 export const fetchSearchTvMovie = (query: string) => {
   return apiSearch(searchTVMoviesEndpoint, query);
 };
+
+export const fetchMovieCreditsInfo = (id: string) => {
+  return apiCall(`https://api.themoviedb.org/3/movie/${id}/credits`);
+};

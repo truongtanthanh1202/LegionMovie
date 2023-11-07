@@ -14,20 +14,17 @@ import {
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
+import { useNavigation } from "@react-navigation/native";
 
-type props = {
-  movieItem: any;
-  size: string;
-  setTitle: boolean;
-};
-
-const MovieCard = ({ movieItem, size, setTitle }: props) => {
+const MovieCard = ({ movieItem, size, setTitle }) => {
+  const navigation = useNavigation();
   const imageBgUrl = {
-    uri: `https://image.tmdb.org/t/p/w500${movieItem?.poster_path}`,
+    uri: `https://image.tmdb.org/t/p/original${movieItem?.poster_path}`,
   };
 
   const handlerToMovieDetailsScreen = () => {
-    // console.log("navigate to film ID: " + movieItem?.id);
+    console.log("navigate to film ID: " + movieItem?.id);
+    navigation.navigate("MovieDetail", { movieItem: movieItem });
   };
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_600SemiBold,
@@ -42,7 +39,9 @@ const MovieCard = ({ movieItem, size, setTitle }: props) => {
     <TouchableOpacity
       style={styles.buttonBg}
       activeOpacity={0.7}
-      onPress={handlerToMovieDetailsScreen}
+      onPress={() => {
+        handlerToMovieDetailsScreen();
+      }}
     >
       <View style={styles.buttonBg}>
         <ImageBackground

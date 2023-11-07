@@ -12,6 +12,8 @@ import Forgot1 from "../screens/forgot_reset_password/Forgot1";
 import Forgot2 from "../screens/forgot_reset_password/Forgot2";
 import Forgot3 from "../screens/forgot_reset_password/Forgot3";
 import BottomTab from "./BottomTab";
+import MovieCard from "../components/atoms/movie_card";
+import MovieDetail from "../screens/movie_detail/MovieDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +34,8 @@ const StackNavigator = () => {
         <Stack.Screen name="Forgot3" component={Forgot3} />
 
         <Stack.Screen name="BottomTab" component={BottomTab} />
+        <Stack.Screen name="MovieCard" component={MovieCard} />
+        <Stack.Screen name="MovieDetail" component={MovieDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

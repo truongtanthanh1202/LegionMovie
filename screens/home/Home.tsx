@@ -27,7 +27,6 @@ import { Categories } from "../../constant/Categories";
 import MovieSlider from "../../components/group/movie_slider";
 
 const Home = () => {
-  const [listTrendingMoviesDay, setListTrendingMoviesDay] = React.useState([]);
   const [listTrendingMoviesWeek, setListTrendingMoviesWeek] = React.useState(
     []
   );
@@ -35,8 +34,8 @@ const Home = () => {
   const [listNewRealeaseMovies, setListNewRealeaseMovies] = React.useState([]);
 
   const randomTrendingMovies =
-    listTrendingMoviesDay[
-      Math.floor(Math.random() * listTrendingMoviesDay.length)
+    listTrendingMoviesWeek[
+      Math.floor(Math.random() * listTrendingMoviesWeek.length)
     ];
 
   const imageBgUrl = {
@@ -44,34 +43,18 @@ const Home = () => {
   };
 
   React.useEffect(() => {
-    trendingMoviesDay();
-    trendingMoviesWeek();
-    trendingTvSeason();
-    newRealeaseMovies();
+    getHomeMovieData();
   }, []);
 
-  const trendingMoviesDay = async () => {
-    const data = await fetchTrendingMoviesDay();
-    if (data && data.results) setListTrendingMoviesDay(data.results);
-    // console.log(data.results);
-  };
-
-  const trendingMoviesWeek = async () => {
+  const getHomeMovieData = async () => {
     const data = await fetchTrendingMoviesWeek();
     if (data && data.results) setListTrendingMoviesWeek(data.results);
-    // console.log(data.results);
-  };
 
-  const trendingTvSeason = async () => {
-    const data = await fetchTrendingTvSeason();
-    if (data && data.results) setListTrendingTVSeason(data.results);
-    // console.log(data.results);
-  };
+    const data1 = await fetchTrendingTvSeason();
+    if (data1 && data1.results) setListTrendingTVSeason(data1.results);
 
-  const newRealeaseMovies = async () => {
-    const data = await fetchNewRealeaseMovies();
-    if (data && data.results) setListNewRealeaseMovies(data.results);
-    // console.log(data.results);
+    const data2 = await fetchNewRealeaseMovies();
+    if (data2 && data2.results) setListNewRealeaseMovies(data2.results);
   };
 
   const listScrollviewRender = [
@@ -98,6 +81,8 @@ const Home = () => {
   if (!fontsLoaded && !fontError) {
     return null;
   }
+
+  console.log("re-render home");
 
   return (
     <ScrollView style={styles.container}>
