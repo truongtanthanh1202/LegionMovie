@@ -14,6 +14,6 @@ export default Morefilm;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#673ab7",
+    backgroundColor: "pink",
   },
 });

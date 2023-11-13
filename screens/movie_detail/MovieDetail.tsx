@@ -31,6 +31,28 @@ import Trailers from "./Trailers";
 import Morefilm from "./Morefilm";
 import { fetchMovieCreditsInfo } from "../../redux/api/movietmdb";
 
+const FirstRoute = () => {
+  return <Comments />;
+};
+const SecondRoute = () => {
+  return <Trailers />;
+};
+const ThirdRoute = () => {
+  return <Morefilm />;
+};
+const renderScene = ({ route }) => {
+  switch (route.key) {
+    case "first":
+      return <FirstRoute />;
+    case "second":
+      return <SecondRoute />;
+    case "third":
+      return <ThirdRoute />;
+    default:
+      return <></>;
+  }
+};
+
 const MovieDetail = ({ navigation, route }) => {
   const { movieItem } = route.params;
 
@@ -46,6 +68,8 @@ const MovieDetail = ({ navigation, route }) => {
   const genre_ids = movieItem.genre_ids;
   const overview = movieItem.overview;
 
+  const handerAddThisFilmToMylist = () => {};
+
   React.useEffect(() => {
     getCastsMovieData();
   }, []);
@@ -55,26 +79,13 @@ const MovieDetail = ({ navigation, route }) => {
     if (data && data.cast) setCastInfo(data.cast);
   };
 
-  const FirstRoute = () => {
-    return <Comments />;
-  };
-  const SecondRoute = () => {
-    return <Trailers />;
-  };
-  const ThirdRoute = () => {
-    return <Morefilm />;
-  };
-  const renderScene = SceneMap({
-    first: FirstRoute,
-    second: SecondRoute,
-    third: ThirdRoute,
-  });
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "Comments" },
     { key: "second", title: "Trailers" },
     { key: "third", title: "More like this" },
   ]);
+  const [currentScene, setCurrentScene] = React.useState(0);
 
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_600SemiBold,
@@ -124,6 +135,7 @@ const MovieDetail = ({ navigation, route }) => {
 
         {/* Body */}
         <View style={{ marginHorizontal: 20, marginTop: 20 }}>
+          {/* Film name, saved, share */}
           <View
             style={{
               flexDirection: "row",
@@ -157,11 +169,13 @@ const MovieDetail = ({ navigation, route }) => {
             </View>
           </View>
 
+          {/* Rating container (star, votes, add my list) */}
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              marginTop: 14,
+              marginTop: 12,
+              gap: 12,
             }}
           >
             <TouchableOpacity
@@ -203,14 +217,40 @@ const MovieDetail = ({ navigation, route }) => {
                 {vote_count} votes
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={{
+                flexDirection: "row",
+                gap: 4,
+                borderWidth: 1.6,
+                borderColor: "white",
+                alignItems: "center",
+                paddingHorizontal: 6,
+                paddingVertical: 4,
+                borderRadius: 6,
+              }}
+              onPress={handerAddThisFilmToMylist}
+            >
+              <AntDesign name="plus" size={14} color="white" />
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 14,
+                  fontFamily: "Urbanist_400Regular",
+                }}
+              >
+                My List
+              </Text>
+            </TouchableOpacity>
           </View>
 
+          {/* Play, download btn */}
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               gap: 12,
-              marginTop: 20,
+              marginTop: 16,
             }}
           >
             <TouchableOpacity style={styles.button}>
@@ -255,7 +295,8 @@ const MovieDetail = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
 
-          <View style={{ marginTop: 20 }}>
+          {/* Film overview */}
+          <View style={{ marginTop: 16 }}>
             <View style={{ flexDirection: "row", gap: 1 }}>
               <Text
                 style={{
@@ -379,12 +420,85 @@ const MovieDetail = ({ navigation, route }) => {
             style={{
               flex: 1,
               backgroundColor: "gray",
-              marginTop: 20,
               height: SIZES.height,
             }}
           >
             <TabView
               navigationState={{ index, routes }}
+              renderTabBar={() => {
+                return (
+                  <View
+                    style={{
+                      backgroundColor: Colors.backgroundColor,
+                      flexDirection: "row",
+                    }}
+                  >
+                    <View
+                      style={{
+                        flex: 33,
+                        paddingVertical: 10,
+                        borderBottomColor:
+                          index == 0 ? Colors.primaryColorLight : "transparent",
+                        borderBottomWidth: 3,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Urbanist_500Medium",
+                          color:
+                            index == 0 ? Colors.primaryColorLight : "white",
+                          fontSize: 16,
+                          textAlign: "center",
+                        }}
+                      >
+                        Comments
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flex: 33,
+                        paddingVertical: 10,
+                        borderBottomColor:
+                          index == 1 ? Colors.primaryColorLight : "transparent",
+                        borderBottomWidth: 3,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Urbanist_500Medium",
+                          color:
+                            index == 1 ? Colors.primaryColorLight : "white",
+                          fontSize: 16,
+                          textAlign: "center",
+                        }}
+                      >
+                        Trailers
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flex: 33,
+                        paddingVertical: 10,
+                        borderBottomColor:
+                          index == 2 ? Colors.primaryColorLight : "transparent",
+                        borderBottomWidth: 3,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: "Urbanist_500Medium",
+                          color:
+                            index == 2 ? Colors.primaryColorLight : "white",
+                          fontSize: 16,
+                          textAlign: "center",
+                        }}
+                      >
+                        More like this
+                      </Text>
+                    </View>
+                  </View>
+                );
+              }}
               renderScene={renderScene}
               onIndexChange={setIndex}
               initialLayout={{ width: SIZES.width }}

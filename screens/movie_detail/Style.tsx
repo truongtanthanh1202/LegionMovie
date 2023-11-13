@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     color: "white",
     opacity: 0.7,
     letterSpacing: 0.7,
+    maxWidth: 80,
   },
 });
 

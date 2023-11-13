@@ -23,7 +23,7 @@ const StackNavigator = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {/* <Stack.Screen name="Splash" component={Splash} /> */}
 
-        <Stack.Screen name="WalkAround" component={WalkAround} />
+        {/* <Stack.Screen name="WalkAround" component={WalkAround} />
         <Stack.Screen name="SignInWelcome" component={SignInWelcome} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignIn" component={SignIn} />
@@ -31,7 +31,7 @@ const StackNavigator = () => {
         <Stack.Screen name="SetupProfile" component={SetupProfile} />
         <Stack.Screen name="Forgot1" component={Forgot1} />
         <Stack.Screen name="Forgot2" component={Forgot2} />
-        <Stack.Screen name="Forgot3" component={Forgot3} />
+        <Stack.Screen name="Forgot3" component={Forgot3} /> */}
 
         <Stack.Screen name="BottomTab" component={BottomTab} />
         <Stack.Screen name="MovieCard" component={MovieCard} />
