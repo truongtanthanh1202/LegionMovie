@@ -9,18 +9,33 @@ export const MyListHook = () => {
     (state: RootState) => state.MyList
   );
 
-  const handlerAddMyListItem = (movieItem) => {
+  const handlerAddMyListItem = (movieItem: MovieItemProperties) => {
     dispatch(addMyListItem(movieItem));
   };
-  const handlerRemoveMyListItem = () => {};
+  const handlerRemoveMyListItem = (id: number) => {
+    // MyListItem.filter((item) => item.id != id);
+    dispatch(removeMyListItem(id));
+  };
   const handlerGetMyListItem = () => {
     return MyListItem;
   };
   const handlerFilterMyListItem = () => {};
+  const checkDuplicate = (id: number) => {
+    let check = true;
+
+    MyListItem.map((item, key) => {
+      if (item.id === id) {
+        check = false;
+      }
+    });
+
+    return check;
+  };
   return {
     handlerAddMyListItem,
     handlerRemoveMyListItem,
     handlerGetMyListItem,
     handlerFilterMyListItem,
+    checkDuplicate,
   };
 };

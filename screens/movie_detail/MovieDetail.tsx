@@ -30,6 +30,7 @@ import Comments from "./Comments";
 import Trailers from "./Trailers";
 import Morefilm from "./Morefilm";
 import { fetchMovieCreditsInfo } from "../../redux/api/movietmdb";
+import { MyListHook } from "../../redux/hook/HandlerMyListHook";
 
 const FirstRoute = () => {
   return <Comments />;
@@ -54,6 +55,14 @@ const renderScene = ({ route }) => {
 };
 
 const MovieDetail = ({ navigation, route }) => {
+  const {
+    handlerAddMyListItem,
+    handlerRemoveMyListItem,
+    handlerGetMyListItem,
+    handlerFilterMyListItem,
+    checkDuplicate,
+  } = MyListHook();
+
   const { movieItem } = route.params;
 
   const [showFullDescription, setShowFullDescription] = React.useState(false);
@@ -68,7 +77,24 @@ const MovieDetail = ({ navigation, route }) => {
   const genre_ids = movieItem.genre_ids;
   const overview = movieItem.overview;
 
-  const handerAddThisFilmToMylist = () => {};
+  const isMovieDuplicate = checkDuplicate(movieID);
+  const handerAddThisFilmToMylist = () => {
+    if (isMovieDuplicate) {
+      handlerAddMyListItem({
+        id: movieItem.id,
+        poster_path: movieItem.poster_path,
+        title: movieItem.title,
+        name: movieItem?.name,
+        vote_average: movieItem.vote_average,
+        vote_count: movieItem.vote_count,
+        genre_ids: movieItem.genre_ids,
+        overview: movieItem.overview,
+      });
+    }
+  };
+  const handlerRemoveThisFilmInMyList = () => {
+    handlerRemoveMyListItem(movieID);
+  };
 
   React.useEffect(() => {
     getCastsMovieData();
@@ -156,11 +182,14 @@ const MovieDetail = ({ navigation, route }) => {
               </Text>
             </View>
             <View style={{ flexDirection: "row", gap: 14 }}>
-              <TouchableOpacity style={styles.shadow}>
+              <TouchableOpacity
+                style={styles.shadow}
+                onPress={handerAddThisFilmToMylist}
+              >
                 <MaterialCommunityIcons
                   name="bookmark-minus-outline"
                   size={20}
-                  color="white"
+                  color={isMovieDuplicate ? "white" : Colors.primaryColorLight}
                 />
               </TouchableOpacity>
               <TouchableOpacity style={styles.shadow}>
@@ -217,31 +246,62 @@ const MovieDetail = ({ navigation, route }) => {
                 {vote_count} votes
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={{
-                flexDirection: "row",
-                gap: 4,
-                borderWidth: 1.6,
-                borderColor: "white",
-                alignItems: "center",
-                paddingHorizontal: 6,
-                paddingVertical: 4,
-                borderRadius: 6,
-              }}
-              onPress={handerAddThisFilmToMylist}
-            >
-              <AntDesign name="plus" size={14} color="white" />
-              <Text
+
+            {isMovieDuplicate ? (
+              <TouchableOpacity
                 style={{
-                  color: "white",
-                  fontSize: 14,
-                  fontFamily: "Urbanist_400Regular",
+                  flexDirection: "row",
+                  gap: 4,
+                  borderWidth: 1.6,
+                  borderColor: "white",
+                  alignItems: "center",
+                  paddingHorizontal: 6,
+                  paddingVertical: 4,
+                  borderRadius: 6,
                 }}
+                onPress={handerAddThisFilmToMylist}
               >
-                My List
-              </Text>
-            </TouchableOpacity>
+                <AntDesign name="plus" size={14} color="white" />
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 14,
+                    fontFamily: "Urbanist_400Regular",
+                  }}
+                >
+                  My List
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  gap: 4,
+                  borderWidth: 1.6,
+                  borderColor: "white",
+                  alignItems: "center",
+                  paddingHorizontal: 6,
+                  paddingVertical: 4,
+                  borderRadius: 6,
+                }}
+                onPress={handlerRemoveThisFilmInMyList}
+              >
+                <Ionicons
+                  name="remove-circle-outline"
+                  size={14}
+                  color="white"
+                />
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 14,
+                    fontFamily: "Urbanist_400Regular",
+                  }}
+                >
+                  Remove
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Play, download btn */}

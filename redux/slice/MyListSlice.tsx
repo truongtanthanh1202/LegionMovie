@@ -1,8 +1,8 @@
 export interface MovieItemProperties {
-  movieID: number;
-  posterPath: string;
-  movieName?: string;
-  tvName?: string;
+  id: number;
+  poster_path: string;
+  title?: string;
+  name?: string;
   vote_average: number;
   vote_count: number;
   genre_ids: number[];
@@ -22,7 +22,12 @@ export const MyListSlice = createSlice({
       state.numberCart++;
       state.MyListItem.push(action.payload);
     },
-    removeMyListItem: (state, action) => {},
+    removeMyListItem: (state, action) => {
+      state.numberCart--;
+      state.MyListItem = state.MyListItem.filter((item) => {
+        return item.id != action.payload;
+      });
+    },
   },
 });
 

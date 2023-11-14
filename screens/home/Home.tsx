@@ -172,7 +172,7 @@ const Home = () => {
                     ...styles.filmCatefories,
                     ...styles.textShadow,
                     fontSize: 14,
-                    fontFamily: "Urbanist_600Medium",
+                    fontFamily: "Urbanist_600Semibold",
                   }}
                 >
                   Play
@@ -195,7 +195,7 @@ const Home = () => {
                     ...styles.filmCatefories,
                     ...styles.textShadow,
                     fontSize: 14,
-                    fontFamily: "Urbanist_600Medium",
+                    fontFamily: "Urbanist_600SemiBold",
                   }}
                 >
                   My List
