@@ -23,10 +23,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { debounce } from "lodash";
 import { fetchSearchTvMovie } from "../../redux/api/movietmdb";
 import MovieCard from "../../components/atoms/movie_card";
+import PageNotFound from "../../assets/svg/PageNotFound";
+import ExploreSearch from "../../assets/svg/ExploreSearch";
 
 const Explore = () => {
   const [searchMoviesList, setSearchMoviesList] = React.useState([]);
   const [inputFocused, setInputFocused] = React.useState(false);
+  const [textInput, setTextInput] = React.useState("");
 
   const handlerSearch = (text: string) => {
     if (text && text.length > 2) {
@@ -76,6 +79,7 @@ const Explore = () => {
                 placeholderTextColor={Colors.textDark}
                 onChangeText={(text: string) => {
                   handlerDelayInputSearch(text);
+                  setTextInput(text);
                 }}
                 onFocus={() => {
                   setInputFocused(true);
@@ -93,33 +97,97 @@ const Explore = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.body}>
-              <ScrollView>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    gap: 20,
-                    marginBottom: 68,
-                  }}
-                >
-                  {searchMoviesList &&
-                    searchMoviesList
-                      .filter((item) => {
-                        return item.backdrop_path != null;
-                      })
-                      .map((item, index) => {
-                        return (
-                          <MovieCard
-                            key={index}
-                            movieItem={item}
-                            size="XL"
-                            setTitle={false}
-                          />
-                        );
-                      })}
-                </View>
-              </ScrollView>
+              <>
+                {textInput.length == 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginBottom: 68,
+                    }}
+                  >
+                    <View style={{ width: 300, height: 240 }}>
+                      <ExploreSearch />
+                    </View>
+                    <Text
+                      style={{
+                        ...styles.textEmpty,
+                        fontFamily: "Urbanist_500Medium",
+                      }}
+                    >
+                      Explore more Movie
+                    </Text>
+                    <Text
+                      style={{
+                        ...styles.textSubEmpty,
+                        fontFamily: "Urbanist_400Regular",
+                        width: 280,
+                      }}
+                    >
+                      Search for your favorite movies and TV series by keywords
+                    </Text>
+                  </View>
+                ) : searchMoviesList.length > 0 ? (
+                  <ScrollView>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        gap: 20,
+                        marginBottom: 68,
+                      }}
+                    >
+                      {searchMoviesList &&
+                        searchMoviesList
+                          .filter((item) => {
+                            return item.backdrop_path != null;
+                          })
+                          .map((item, index) => {
+                            return (
+                              <MovieCard
+                                key={index}
+                                movieItem={item}
+                                size="XL"
+                                setTitle={false}
+                              />
+                            );
+                          })}
+                    </View>
+                  </ScrollView>
+                ) : (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginBottom: 68,
+                    }}
+                  >
+                    <View style={{ width: 300, height: 240 }}>
+                      <PageNotFound />
+                    </View>
+                    <Text
+                      style={{
+                        ...styles.textEmpty,
+                        fontFamily: "Urbanist_500Medium",
+                      }}
+                    >
+                      Not Found
+                    </Text>
+                    <Text
+                      style={{
+                        ...styles.textSubEmpty,
+                        fontFamily: "Urbanist_400Regular",
+                      }}
+                    >
+                      Sorry, the keyword you entered could not be found. Try to
+                      check again or search with another keywords.
+                    </Text>
+                  </View>
+                )}
+              </>
             </View>
           </SafeAreaView>
         </TouchableWithoutFeedback>

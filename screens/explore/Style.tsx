@@ -38,6 +38,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
+  textEmpty: {
+    fontSize: 24,
+    color: Colors.primaryColorLight,
+    letterSpacing: 0.4,
+    marginTop: 20,
+  },
+  textSubEmpty: {
+    marginTop: 14,
+    fontSize: 16,
+    color: "white",
+    width: 340,
+    textAlign: "center",
+    lineHeight: 20,
+  },
 });
 
 export default styles;
