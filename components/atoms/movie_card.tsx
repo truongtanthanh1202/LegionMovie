@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import {
   StyleSheet,
   View,
@@ -44,24 +45,30 @@ const MovieCard = ({ movieItem, size, setTitle }) => {
       }}
     >
       <View style={styles.buttonBg}>
-        <ImageBackground
-          source={imageBgUrl}
-          resizeMode="cover"
-          style={size == "L" ? styles.imageL : styles.imageXL}
+        <Suspense
+          fallback={
+            <View style={size == "L" ? styles.imageL : styles.imageXL}></View>
+          }
         >
-          <View style={styles.imageHeader}>
-            <View style={styles.scoreRatingContainer}>
-              <Text
-                style={{
-                  ...styles.scoreRating,
-                  fontFamily: "Urbanist_500Medium",
-                }}
-              >
-                {movieItem?.vote_average.toFixed(1)}
-              </Text>
+          <ImageBackground
+            source={imageBgUrl}
+            resizeMode="cover"
+            style={size == "L" ? styles.imageL : styles.imageXL}
+          >
+            <View style={styles.imageHeader}>
+              <View style={styles.scoreRatingContainer}>
+                <Text
+                  style={{
+                    ...styles.scoreRating,
+                    fontFamily: "Urbanist_500Medium",
+                  }}
+                >
+                  {movieItem?.vote_average.toFixed(1)}
+                </Text>
+              </View>
             </View>
-          </View>
-        </ImageBackground>
+          </ImageBackground>
+        </Suspense>
       </View>
       {setTitle && (
         <Text style={{ ...styles.movieName, fontFamily: "Urbanist_500Medium" }}>

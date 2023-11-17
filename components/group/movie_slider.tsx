@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -6,6 +7,7 @@ import {
   View,
   SafeAreaView,
   Modal,
+  FlatList,
 } from "react-native";
 import React from "react";
 import {
@@ -15,12 +17,12 @@ import {
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
 import { Colors } from "../../constant/Color";
-import MovieCard from "../atoms/movie_card";
 import { AntDesign, Feather } from "@expo/vector-icons";
+import MovieCard from "../atoms/movie_card";
 
 type props = {
   title: string;
-  listMoviesData: object[];
+  listMoviesData: any;
 };
 
 const MovieSlider = ({ title, listMoviesData }: props) => {
@@ -49,44 +51,28 @@ const MovieSlider = ({ title, listMoviesData }: props) => {
           <SafeAreaView
             style={{ ...styles.modalContainer, paddingHorizontal: 20 }}
           >
-            <ScrollView style={styles.modalContainer}>
-              <View style={styles.modalViewHeader}>
-                <TouchableOpacity
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <AntDesign name="arrowleft" size={24} color="white" />
-                </TouchableOpacity>
-                <Text style={{ ...styles.textTitle, flex: 70, marginLeft: 10 }}>
-                  {title}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Feather name="search" size={24} color="white" />
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  marginTop: 28,
-                  gap: 20,
-                }}
-              >
-                {/* List of Movie Card */}
-                {listMoviesData.map((item, index) => {
-                  return (
-                    <MovieCard
-                      key={index}
-                      movieItem={item}
-                      size="XL"
-                      setTitle={true}
-                    />
-                  );
-                })}
-              </View>
-            </ScrollView>
+            <View style={styles.modalViewHeader}>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <AntDesign name="arrowleft" size={24} color="white" />
+              </TouchableOpacity>
+              <Text style={{ ...styles.textTitle, flex: 70, marginLeft: 10 }}>
+                {title}
+              </Text>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <Feather name="search" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+            <FlatList
+              data={listMoviesData}
+              numColumns={2}
+              keyExtractor={(item) => item.id}
+              horizontal={false}
+              renderItem={({ item, index }) => (
+                <View style={{ marginBottom: 16, marginRight: 16 }} key={index}>
+                  <MovieCard movieItem={item} size="XL" setTitle={true} />
+                </View>
+              )}
+            />
           </SafeAreaView>
         </View>
       </Modal>
@@ -103,20 +89,16 @@ const MovieSlider = ({ title, listMoviesData }: props) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        <View style={{ flexDirection: "row", gap: 16 }}>
-          {listMoviesData.map((item, index) => {
-            return (
-              <MovieCard
-                key={index}
-                movieItem={item}
-                size="L"
-                setTitle={true}
-              />
-            );
-          })}
-        </View>
-      </ScrollView>
+      <FlatList
+        data={listMoviesData}
+        horizontal
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => (
+          <View style={{ marginRight: 16 }} key={index}>
+            <MovieCard movieItem={item} size="L" setTitle={true} />
+          </View>
+        )}
+      />
     </View>
   );
 };
@@ -150,5 +132,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 32,
+    marginBottom: 28,
   },
 });

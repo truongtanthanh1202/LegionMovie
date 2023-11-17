@@ -48,7 +48,7 @@ const Home = () => {
 
   const listScrollviewRender = [
     {
-      title: "Top 10 Movies This Week",
+      title: "Top Movies This Week",
       data: ListTrendingMoviesWeek,
     },
     {
