@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./Style";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -25,7 +25,7 @@ const Profile = () => {
   };
 
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });

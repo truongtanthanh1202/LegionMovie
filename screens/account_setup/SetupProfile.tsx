@@ -20,7 +20,7 @@ import styles from "./Style";
 import { Colors } from "../../constant/Color";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -34,7 +34,7 @@ const SetupProfile = ({ navigation }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const isCreateNewAccountProcessing: boolean = false;
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });
@@ -90,7 +90,7 @@ const SetupProfile = ({ navigation }) => {
                   </View>
                   <Text
                     style={{
-                      fontFamily: "Urbanist_600SemiBold",
+                      fontFamily: "Urbanist_700Bold",
                       color: Colors.redLight,
                       fontSize: 24,
                       letterSpacing: 0.4,
@@ -144,7 +144,7 @@ const SetupProfile = ({ navigation }) => {
                         <Text
                           style={{
                             ...styles.textInButton,
-                            fontFamily: "Urbanist_600SemiBold",
+                            fontFamily: "Urbanist_700Bold",
                             fontSize: 16,
                             letterSpacing: 0,
                           }}
@@ -183,7 +183,7 @@ const SetupProfile = ({ navigation }) => {
               </TouchableOpacity>
               <Text
                 style={{
-                  fontFamily: "Urbanist_600SemiBold",
+                  fontFamily: "Urbanist_700Bold",
                   color: "white",
                   fontSize: 24,
                   letterSpacing: 0.4,
@@ -343,7 +343,7 @@ const SetupProfile = ({ navigation }) => {
                   <Text
                     style={{
                       ...styles.textInButton,
-                      fontFamily: "Urbanist_600SemiBold",
+                      fontFamily: "Urbanist_700Bold",
                     }}
                   >
                     Skip
@@ -361,7 +361,7 @@ const SetupProfile = ({ navigation }) => {
                   <Text
                     style={{
                       ...styles.textInButton,
-                      fontFamily: "Urbanist_600SemiBold",
+                      fontFamily: "Urbanist_700Bold",
                     }}
                   >
                     Continue

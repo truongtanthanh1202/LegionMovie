@@ -9,7 +9,6 @@ import React from "react";
 import {
   useFonts,
   Urbanist_700Bold,
-  Urbanist_600SemiBold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -58,7 +57,6 @@ const LongListCard = ({
 
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_700Bold,
-    Urbanist_600SemiBold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });

@@ -10,7 +10,7 @@ import {
 import React from "react";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -27,7 +27,7 @@ const MovieSlider = ({ title, listMoviesData }: props) => {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });
@@ -92,9 +92,7 @@ const MovieSlider = ({ title, listMoviesData }: props) => {
       </Modal>
 
       <View style={styles.header}>
-        <Text
-          style={{ ...styles.textTitle, fontFamily: "Urbanist_600SemiBold" }}
-        >
+        <Text style={{ ...styles.textTitle, fontFamily: "Urbanist_700Bold" }}>
           {title}
         </Text>
         <TouchableOpacity onPress={() => setModalVisible(true)}>

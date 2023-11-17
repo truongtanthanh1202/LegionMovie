@@ -3,8 +3,10 @@ import axios from "axios";
 // endpoints
 const trendingMoviesDayEndpoint = `https://api.themoviedb.org/3/trending/movie/day`;
 const trendingMoviesWeekEndpoint = `https://api.themoviedb.org/3/trending/movie/week`;
-const trendingTvSeasonEndpoint = `https://api.themoviedb.org/3/trending/tv/day`;
+const trendingTvSeriesDayEndpoint = `https://api.themoviedb.org/3/trending/tv/day`;
+const trendingTvSeriesWeekEndpoint = `https://api.themoviedb.org/3/trending/tv/week`;
 const newRealeaseMoviesEndpoint = `https://api.themoviedb.org/3/movie/now_playing`;
+const newRealeaseTvSeriesEndpoint = `https://api.themoviedb.org/3/tv/airing_today`;
 const searchTVMoviesEndpoint = `https://api.themoviedb.org/3/search/multi`;
 
 const apiCall = async (endpoint: string) => {
@@ -65,12 +67,20 @@ export const fetchTrendingMoviesWeek = () => {
   return apiCall(trendingMoviesWeekEndpoint);
 };
 
-export const fetchTrendingTvSeason = () => {
-  return apiCall(trendingTvSeasonEndpoint);
+export const fetchTrendingTvSeriesDay = () => {
+  return apiCall(trendingTvSeriesDayEndpoint);
+};
+
+export const fetchTrendingTvSeriesWeek = () => {
+  return apiCall(trendingTvSeriesWeekEndpoint);
 };
 
 export const fetchNewRealeaseMovies = () => {
   return apiCall(newRealeaseMoviesEndpoint);
+};
+
+export const fetchNewRealeaseTvSeries = () => {
+  return apiCall(newRealeaseTvSeriesEndpoint);
 };
 
 export const fetchSearchTvMovie = (query: string) => {

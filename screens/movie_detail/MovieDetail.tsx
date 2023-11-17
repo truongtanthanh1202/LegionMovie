@@ -19,7 +19,7 @@ import {
 import { Colors } from "../../constant/Color";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -114,7 +114,7 @@ const MovieDetail = ({ navigation, route }) => {
   const [currentScene, setCurrentScene] = React.useState(0);
 
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });

@@ -12,7 +12,7 @@ import { MyListHook } from "../../redux/hook/HandlerMyListHook";
 import NoData from "../../assets/svg/NoData";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -32,7 +32,7 @@ const Mylist = () => {
   console.log(allMyListItems);
 
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });

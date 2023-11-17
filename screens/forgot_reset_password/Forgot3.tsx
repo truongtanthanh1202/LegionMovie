@@ -20,7 +20,7 @@ import styles from "./Style";
 import { Colors } from "../../constant/Color";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -33,7 +33,7 @@ const Forgot3 = ({ navigation }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
   const isResetPasswordProcessing: boolean = false;
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });
@@ -70,7 +70,7 @@ const Forgot3 = ({ navigation }) => {
                   </View>
                   <Text
                     style={{
-                      fontFamily: "Urbanist_600SemiBold",
+                      fontFamily: "Urbanist_700Bold",
                       color: Colors.redLight,
                       fontSize: 24,
                       letterSpacing: 0.4,
@@ -124,7 +124,7 @@ const Forgot3 = ({ navigation }) => {
                         <Text
                           style={{
                             ...styles.textInButton,
-                            fontFamily: "Urbanist_600SemiBold",
+                            fontFamily: "Urbanist_700Bold",
                             fontSize: 16,
                             letterSpacing: 0,
                           }}
@@ -162,7 +162,7 @@ const Forgot3 = ({ navigation }) => {
               </TouchableOpacity>
               <Text
                 style={{
-                  fontFamily: "Urbanist_600SemiBold",
+                  fontFamily: "Urbanist_700Bold",
                   color: "white",
                   fontSize: 24,
                   letterSpacing: 0.4,
@@ -316,7 +316,7 @@ const Forgot3 = ({ navigation }) => {
                   <Text
                     style={{
                       ...styles.textInButton,
-                      fontFamily: "Urbanist_600SemiBold",
+                      fontFamily: "Urbanist_700Bold",
                     }}
                   >
                     Continue

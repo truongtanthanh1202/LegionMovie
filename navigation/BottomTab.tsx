@@ -4,10 +4,9 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
-  Urbanist_700Bold,
 } from "@expo-google-fonts/urbanist";
 import Home from "../screens/home/Home";
 import Explore from "../screens/explore/Explore";
@@ -20,10 +19,9 @@ const Tab = createBottomTabNavigator();
 
 const BottomTab = ({ route, navigation }) => {
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
-    Urbanist_700Bold,
   });
 
   if (!fontsLoaded && !fontError) {
@@ -75,7 +73,7 @@ const BottomTab = ({ route, navigation }) => {
                     color: focused ? Colors.redDark : Colors.textDark,
                     fontFamily: focused
                       ? "Urbanist_700Bold"
-                      : "Urbanist_600SemiBold",
+                      : "Urbanist_500Medium",
                   }}
                 >
                   {route.name}

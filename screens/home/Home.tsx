@@ -9,71 +9,64 @@ import {
 } from "react-native";
 import React from "react";
 import styles from "./Style";
-import {
-  fetchTrendingMoviesDay,
-  fetchTrendingMoviesWeek,
-  fetchTrendingTvSeason,
-  fetchNewRealeaseMovies,
-} from "../../redux/api/movietmdb";
-import { Feather, AntDesign, Entypo } from "@expo/vector-icons";
-import { Colors } from "../../constant/Color";
+import { Feather, AntDesign } from "@expo/vector-icons";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
 import { Categories } from "../../constant/Categories";
 import MovieSlider from "../../components/group/movie_slider";
+import { FilmStoreHook } from "../../redux/hook/HandlerFilmStoreHook";
 
 const Home = () => {
-  const [listTrendingMoviesWeek, setListTrendingMoviesWeek] = React.useState(
-    []
-  );
-  const [listTrendingTVSeason, setListTrendingTVSeason] = React.useState([]);
-  const [listNewRealeaseMovies, setListNewRealeaseMovies] = React.useState([]);
+  const {
+    getTrendingMoviesDay,
+    getTrendingMoviesWeek,
+    getTrendingTvSeriesDay,
+    getTrendingTvSeriesWeek,
+    getNewRealeaseMovies,
+    getNewRealeaseTvSeries,
+  } = FilmStoreHook();
+
+  const ListTrendingMoviesDay = getTrendingMoviesDay();
+  const ListTrendingMoviesWeek = getTrendingMoviesWeek();
+  const ListTrendingTvSeriesDay = getTrendingTvSeriesDay();
+  const ListTrendingTvSeriesWeek = getTrendingTvSeriesWeek();
+  const ListNewRealeaseMovies = getNewRealeaseMovies();
+  const ListNewRealeaseTvSeries = getNewRealeaseTvSeries();
 
   const randomTrendingMovies =
-    listTrendingMoviesWeek[
-      Math.floor(Math.random() * listTrendingMoviesWeek.length)
+    ListTrendingMoviesWeek[
+      Math.floor(Math.random() * ListTrendingMoviesWeek.length)
     ];
 
   const imageBgUrl = {
     uri: `https://image.tmdb.org/t/p/w500${randomTrendingMovies?.poster_path}`,
   };
 
-  React.useEffect(() => {
-    getHomeMovieData();
-  }, []);
-
-  const getHomeMovieData = async () => {
-    const data = await fetchTrendingMoviesWeek();
-    if (data && data.results) setListTrendingMoviesWeek(data.results);
-
-    const data1 = await fetchTrendingTvSeason();
-    if (data1 && data1.results) setListTrendingTVSeason(data1.results);
-
-    const data2 = await fetchNewRealeaseMovies();
-    if (data2 && data2.results) setListNewRealeaseMovies(data2.results);
-  };
-
   const listScrollviewRender = [
     {
       title: "Top 10 Movies This Week",
-      data: listTrendingMoviesWeek,
+      data: ListTrendingMoviesWeek,
     },
     {
-      title: "New Realease",
-      data: listNewRealeaseMovies,
+      title: "New Realease Movie",
+      data: ListNewRealeaseMovies,
     },
     {
-      title: "Popular TV Series",
-      data: listTrendingTVSeason,
+      title: "Trending TV Series this Week",
+      data: ListTrendingTvSeriesWeek,
+    },
+    {
+      title: "TV Series On Air",
+      data: ListNewRealeaseTvSeries,
     },
   ];
 
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });
@@ -131,7 +124,7 @@ const Home = () => {
               style={{
                 ...styles.filmTitle,
                 ...styles.textShadow,
-                fontFamily: "Urbanist_600SemiBold",
+                fontFamily: "Urbanist_700Bold",
               }}
             >
               {randomTrendingMovies?.title}
@@ -172,7 +165,7 @@ const Home = () => {
                     ...styles.filmCatefories,
                     ...styles.textShadow,
                     fontSize: 14,
-                    fontFamily: "Urbanist_600Semibold",
+                    fontFamily: "Urbanist_700Bold",
                   }}
                 >
                   Play
@@ -195,7 +188,7 @@ const Home = () => {
                     ...styles.filmCatefories,
                     ...styles.textShadow,
                     fontSize: 14,
-                    fontFamily: "Urbanist_600SemiBold",
+                    fontFamily: "Urbanist_700Bold",
                   }}
                 >
                   My List

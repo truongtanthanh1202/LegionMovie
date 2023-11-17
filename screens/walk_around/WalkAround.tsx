@@ -15,7 +15,7 @@ import {
   useFonts,
   Urbanist_500Medium,
   Urbanist_400Regular,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
 } from "@expo-google-fonts/urbanist";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -102,7 +102,7 @@ const WalkAround = ({ navigation }) => {
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_500Medium,
     Urbanist_400Regular,
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
   });
 
   if (!fontsLoaded && !fontError) {
@@ -143,7 +143,7 @@ const WalkAround = ({ navigation }) => {
                     <Text
                       style={{
                         color: "white",
-                        fontFamily: "Urbanist_600SemiBold",
+                        fontFamily: "Urbanist_700Bold",
                         fontSize: 34,
                         alignSelf: "center",
                         marginBottom: 20,
@@ -181,7 +181,7 @@ const WalkAround = ({ navigation }) => {
                       <Text
                         style={{
                           color: "white",
-                          fontFamily: "Urbanist_600SemiBold",
+                          fontFamily: "Urbanist_700Bold",
                           fontSize: 14,
                           letterSpacing: 0.4,
                         }}

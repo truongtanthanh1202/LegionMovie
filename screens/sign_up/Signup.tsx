@@ -17,7 +17,7 @@ import styles from "./Style";
 import { Colors } from "../../constant/Color";
 import {
   useFonts,
-  Urbanist_600SemiBold,
+  Urbanist_700Bold,
   Urbanist_500Medium,
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
@@ -31,7 +31,7 @@ const SignUp = ({ navigation }) => {
   const [rememberUser, setRememberUser] = React.useState(false);
 
   let [fontsLoaded, fontError] = useFonts({
-    Urbanist_600SemiBold,
+    Urbanist_700Bold,
     Urbanist_500Medium,
     Urbanist_400Regular,
   });
@@ -99,7 +99,7 @@ const SignUp = ({ navigation }) => {
               <Text
                 style={{
                   ...styles.textTitle,
-                  fontFamily: "Urbanist_600SemiBold",
+                  fontFamily: "Urbanist_700Bold",
                 }}
               >
                 Create Your Account
