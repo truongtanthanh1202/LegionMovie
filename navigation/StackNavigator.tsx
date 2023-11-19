@@ -17,7 +17,7 @@ import MovieDetail from "../screens/movie_detail/MovieDetail";
 
 const Stack = createNativeStackNavigator();
 
-const isSignIn = true;
+const isSignIn = false;
 
 const StackNavigator = () => {
   return (

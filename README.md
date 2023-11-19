@@ -6,6 +6,7 @@ React Native Movie Streaming app
 git clone https://github.com/truongtanthanh1202/LegionMovie.git
 cd LegionMovie
 npm install
+cp .env.example .env
 ```
 ### Run this project with Expo go
 ```
