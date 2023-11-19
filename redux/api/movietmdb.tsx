@@ -90,3 +90,11 @@ export const fetchSearchTvMovie = (query: string) => {
 export const fetchMovieCreditsInfo = (id: string) => {
   return apiCall(`https://api.themoviedb.org/3/movie/${id}/credits`);
 };
+
+export const fetchTvSeriesCreditsInfo = (id: string) => {
+  return apiCall(`https://api.themoviedb.org/3/tv/${id}/credits`);
+};
+
+export const fetchTrailerMovies = (id: string) => {
+  return apiCall(`https://api.themoviedb.org/3/movie/${id}/videos`);
+};

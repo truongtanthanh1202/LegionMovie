@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
     backgroundColor: Colors.backgroundColor,
-    marginBottom: 0,
   },
   image: {
     width: "100%",

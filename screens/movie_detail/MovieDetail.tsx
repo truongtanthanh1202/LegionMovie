@@ -6,8 +6,9 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
-import React from "react";
+import React, { lazy } from "react";
 import styles from "./Style";
 import {
   Feather,
@@ -25,34 +26,16 @@ import {
 } from "@expo-google-fonts/urbanist";
 import { SIZES } from "../../constant/Constant";
 import { Categories } from "../../constant/Categories";
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
+import { TabView } from "react-native-tab-view";
 import Comments from "./Comments";
-import Trailers from "./Trailers";
 import Morefilm from "./Morefilm";
-import { fetchMovieCreditsInfo } from "../../redux/api/movietmdb";
+import {
+  fetchMovieCreditsInfo,
+  fetchTrailerMovies,
+  fetchTvSeriesCreditsInfo,
+} from "../../redux/api/movietmdb";
 import { MyListHook } from "../../redux/hook/HandlerMyListHook";
-
-const FirstRoute = () => {
-  return <Comments />;
-};
-const SecondRoute = () => {
-  return <Trailers />;
-};
-const ThirdRoute = () => {
-  return <Morefilm />;
-};
-const renderScene = ({ route }) => {
-  switch (route.key) {
-    case "first":
-      return <FirstRoute />;
-    case "second":
-      return <SecondRoute />;
-    case "third":
-      return <ThirdRoute />;
-    default:
-      return <></>;
-  }
-};
+import TrailerCard from "./TrailerCard";
 
 const MovieDetail = ({ navigation, route }) => {
   const {
@@ -63,11 +46,11 @@ const MovieDetail = ({ navigation, route }) => {
     checkDuplicate,
   } = MyListHook();
 
-  const { movieItem } = route.params;
-
   const [showFullDescription, setShowFullDescription] = React.useState(false);
   const [castsInfo, setCastInfo] = React.useState([]);
+  const [trailer, setTrailer] = React.useState([]);
 
+  const { movieItem } = route.params;
   const movieID = movieItem.id;
   const posterPath = movieItem.poster_path;
   const movieName = movieItem.title;
@@ -98,6 +81,8 @@ const MovieDetail = ({ navigation, route }) => {
 
   React.useEffect(() => {
     getCastsMovieData();
+    // getCastsTvSeriesData();
+    getTrailerMovies();
   }, []);
 
   const getCastsMovieData = async () => {
@@ -105,13 +90,62 @@ const MovieDetail = ({ navigation, route }) => {
     if (data && data.cast) setCastInfo(data.cast);
   };
 
+  const getCastsTvSeriesData = async () => {
+    const data = await fetchTvSeriesCreditsInfo(movieID);
+    if (data && data.cast) setCastInfo(data.cast);
+  };
+
+  const getTrailerMovies = async () => {
+    const data = await fetchTrailerMovies(movieID);
+    if (data) setTrailer(data.results);
+    console.log(trailer);
+  };
+
+  const FirstRoute = () => {
+    return <Comments />;
+  };
+  const SecondRoute = () => {
+    return (
+      <>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: Colors.backgroundColor,
+          }}
+        >
+          <View style={{ marginTop: 20, marginBottom: 68, gap: 20 }}>
+            <Text>{trailer.length}</Text>
+            {trailer.map((item, index) => {
+              return (
+                <View key={index}>
+                  <TrailerCard trailerInfo={item} />
+                </View>
+              );
+            })}
+          </View>
+        </View>
+      </>
+    );
+  };
+  const ThirdRoute = () => {
+    return <Morefilm />;
+  };
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case "first":
+        return <FirstRoute />;
+      case "second":
+        return <SecondRoute />;
+      case "third":
+        return <ThirdRoute />;
+    }
+  };
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "Comments" },
     { key: "second", title: "Trailers" },
     { key: "third", title: "More like this" },
   ]);
-  const [currentScene, setCurrentScene] = React.useState(0);
 
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_700Bold,

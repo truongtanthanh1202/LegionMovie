@@ -65,10 +65,12 @@ const MovieSlider = ({ title, listMoviesData }: props) => {
             <FlatList
               data={listMoviesData}
               numColumns={2}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.id.toString()}
               horizontal={false}
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={{ justifyContent: "space-between" }}
               renderItem={({ item, index }) => (
-                <View style={{ marginBottom: 16, marginRight: 16 }} key={index}>
+                <View style={{ marginBottom: 20 }} key={index}>
                   <MovieCard movieItem={item} size="XL" setTitle={true} />
                 </View>
               )}
@@ -92,7 +94,8 @@ const MovieSlider = ({ title, listMoviesData }: props) => {
       <FlatList
         data={listMoviesData}
         horizontal
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item, index }) => (
           <View style={{ marginRight: 16 }} key={index}>
             <MovieCard movieItem={item} size="L" setTitle={true} />
