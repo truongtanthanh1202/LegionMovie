@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import { StatusBar } from "react-native";
 import { Colors } from "./constant/Color";
 import StackNavigator from "./navigation/StackNavigator";

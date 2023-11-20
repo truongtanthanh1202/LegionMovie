@@ -9,13 +9,15 @@ import {
 } from "@expo-google-fonts/urbanist";
 import LongListCard from "../../components/atoms/long_list_card";
 import { FontAwesome, Feather, Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
+  const navigation = useNavigation();
   const navigateToEditProfile = () => {
     console.log("navigateToEditProfile");
   };
   const navigateToNoti = () => {
-    console.log("navigateToNoti");
+    navigation.navigate("Notification");
   };
   const navigateToDownLoad = () => {
     console.log("navigateToDownLoad");

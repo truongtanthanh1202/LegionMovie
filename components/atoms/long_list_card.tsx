@@ -21,6 +21,7 @@ interface propsTypes {
   subTitle?: string;
   type: "Normal" | "Boolean";
   onPress: Function;
+  initState?: "True" | "False";
 }
 
 const LongListCard = ({
@@ -29,6 +30,7 @@ const LongListCard = ({
   subTitle,
   type,
   onPress,
+  initState,
 }: propsTypes) => {
   const [isSelected, setIsSeclected] = React.useState(true);
 
@@ -40,18 +42,26 @@ const LongListCard = ({
   });
 
   React.useEffect(() => {
-    if (isSelected) {
-      Animated.timing(radioAnimated, {
-        toValue: 28,
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
+    if (!initState) {
+      if (isSelected) {
+        Animated.timing(radioAnimated, {
+          toValue: 28,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+      } else {
+        Animated.timing(radioAnimated, {
+          toValue: 2,
+          duration: 300,
+          useNativeDriver: false,
+        }).start();
+      }
     } else {
-      Animated.timing(radioAnimated, {
-        toValue: 2,
-        duration: 300,
-        useNativeDriver: false,
-      }).start();
+      if (initState == "True") {
+        setIsSeclected(true);
+      } else {
+        setIsSeclected(false);
+      }
     }
   }, [isSelected]);
 

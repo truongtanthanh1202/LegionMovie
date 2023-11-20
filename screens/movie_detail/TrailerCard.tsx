@@ -10,8 +10,9 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 
-const TrailerCard = (trailerInfo: any) => {
-  // console.log(trailerInfo);
+const TrailerCard = ({ trailerInfo }) => {
+  const randomDurationMinutes = Math.floor(Math.random() * 10);
+  const randomDurationSeconds = Math.floor(Math.random() * 100);
 
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_700Bold,
@@ -27,12 +28,16 @@ const TrailerCard = (trailerInfo: any) => {
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={() => {
-          Linking.openURL(`https://www.youtube.com/watch?v=SZtvRyyQGHM`);
+          Linking.openURL(
+            `https://www.youtube.com/watch?v=${trailerInfo?.key}`
+          );
         }}
       >
         <Image
           source={{
-            uri: "https://i.ytimg.com/vi/SZtvRyyQGHM/hqdefault.jpg",
+            uri:
+              `https://i.ytimg.com/vi/${trailerInfo?.key}/hqdefault.jpg` ||
+              "https://i.ytimg.com/vi/SZtvRyyQGHM/hqdefault.jpg",
           }}
           resizeMode="cover"
           style={styles.ImageTrailer}
@@ -46,9 +51,12 @@ const TrailerCard = (trailerInfo: any) => {
           style={{
             ...styles.trailerName,
             fontFamily: "Urbanist_500Medium",
+            maxWidth: 230,
           }}
         >
-          {"Offical trailer" || trailerInfo.name}
+          {trailerInfo?.name?.length > 40
+            ? trailerInfo.name.slice(0, 40) + "..."
+            : trailerInfo.name || "Offical trailer"}
         </Text>
         <Text
           style={{
@@ -56,7 +64,7 @@ const TrailerCard = (trailerInfo: any) => {
             fontFamily: "Urbanist_400Regular",
           }}
         >
-          1m 45s
+          {`${randomDurationMinutes}m ${randomDurationSeconds}s`}
         </Text>
         <View style={styles.stateTrailer}>
           <Text

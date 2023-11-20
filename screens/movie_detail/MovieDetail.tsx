@@ -6,7 +6,6 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  FlatList,
 } from "react-native";
 import React, { lazy } from "react";
 import styles from "./Style";
@@ -26,16 +25,17 @@ import {
 } from "@expo-google-fonts/urbanist";
 import { SIZES } from "../../constant/Constant";
 import { Categories } from "../../constant/Categories";
-import { TabView } from "react-native-tab-view";
-import Comments from "./Comments";
-import Morefilm from "./Morefilm";
 import {
   fetchMovieCreditsInfo,
+  fetchMoviesReviews,
+  fetchSimilarMovies,
   fetchTrailerMovies,
   fetchTvSeriesCreditsInfo,
 } from "../../redux/api/movietmdb";
 import { MyListHook } from "../../redux/hook/HandlerMyListHook";
 import TrailerCard from "./TrailerCard";
+import { Tabs, MaterialTabBar } from "react-native-collapsible-tab-view";
+import MovieCard from "../../components/atoms/movie_card";
 
 const MovieDetail = ({ navigation, route }) => {
   const {
@@ -49,6 +49,8 @@ const MovieDetail = ({ navigation, route }) => {
   const [showFullDescription, setShowFullDescription] = React.useState(false);
   const [castsInfo, setCastInfo] = React.useState([]);
   const [trailer, setTrailer] = React.useState([]);
+  const [similarMovies, setSimilarMovies] = React.useState([]);
+  const [moviesReviews, setMoviesReviews] = React.useState([]);
 
   const { movieItem } = route.params;
   const movieID = movieItem.id;
@@ -79,10 +81,16 @@ const MovieDetail = ({ navigation, route }) => {
     handlerRemoveMyListItem(movieID);
   };
 
+  const handlerPlayVideo = () => {
+    console.log(trailer);
+  };
+
   React.useEffect(() => {
     getCastsMovieData();
     // getCastsTvSeriesData();
     getTrailerMovies();
+    getMoviesReview();
+    getSimilarMovies();
   }, []);
 
   const getCastsMovieData = async () => {
@@ -98,67 +106,21 @@ const MovieDetail = ({ navigation, route }) => {
   const getTrailerMovies = async () => {
     const data = await fetchTrailerMovies(movieID);
     if (data) setTrailer(data.results);
-    console.log(trailer);
   };
 
-  const FirstRoute = () => {
-    return <Comments />;
+  const getMoviesReview = async () => {
+    const data = await fetchMoviesReviews(movieID);
+    if (data) setMoviesReviews(data.results);
   };
-  const SecondRoute = () => {
+
+  const getSimilarMovies = async () => {
+    const data = await fetchSimilarMovies(movieID);
+    if (data) setSimilarMovies(data.results);
+  };
+
+  const renderFlatListHeader = () => {
     return (
       <>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: Colors.backgroundColor,
-          }}
-        >
-          <View style={{ marginTop: 20, marginBottom: 68, gap: 20 }}>
-            <Text>{trailer.length}</Text>
-            {trailer.map((item, index) => {
-              return (
-                <View key={index}>
-                  <TrailerCard trailerInfo={item} />
-                </View>
-              );
-            })}
-          </View>
-        </View>
-      </>
-    );
-  };
-  const ThirdRoute = () => {
-    return <Morefilm />;
-  };
-  const renderScene = ({ route }) => {
-    switch (route.key) {
-      case "first":
-        return <FirstRoute />;
-      case "second":
-        return <SecondRoute />;
-      case "third":
-        return <ThirdRoute />;
-    }
-  };
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: "first", title: "Comments" },
-    { key: "second", title: "Trailers" },
-    { key: "third", title: "More like this" },
-  ]);
-
-  let [fontsLoaded, fontError] = useFonts({
-    Urbanist_700Bold,
-    Urbanist_500Medium,
-    Urbanist_400Regular,
-  });
-
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
-  return (
-    <ScrollView style={styles.container}>
-      <SafeAreaView style={styles.safeContainer}>
         <ImageBackground
           style={styles.image}
           resizeMode="cover"
@@ -192,7 +154,6 @@ const MovieDetail = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-
         {/* Body */}
         <View style={{ marginHorizontal: 20, marginTop: 20 }}>
           {/* Film name, saved, share */}
@@ -347,7 +308,7 @@ const MovieDetail = ({ navigation, route }) => {
               marginTop: 16,
             }}
           >
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handlerPlayVideo}>
               <View
                 style={{ flexDirection: "row", gap: 8, alignItems: "center" }}
               >
@@ -481,7 +442,7 @@ const MovieDetail = ({ navigation, route }) => {
                       <Image
                         style={{ width: 44, height: 44, borderRadius: 44 }}
                         source={{
-                          uri: `https://image.tmdb.org/t/p/w500${item?.profile_path}`,
+                          uri: `https://image.tmdb.org/t/p/w200${item?.profile_path}`,
                         }}
                       />
                       <View>
@@ -508,99 +469,166 @@ const MovieDetail = ({ navigation, route }) => {
               </View>
             </ScrollView>
           </View>
+        </View>
+      </>
+    );
+  };
 
-          {/* Tabs view (comments, trailer, more film like this) */}
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "gray",
-              height: SIZES.height,
-            }}
-          >
-            <TabView
-              navigationState={{ index, routes }}
-              renderTabBar={() => {
+  const tabBar = (props) => (
+    <MaterialTabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: Colors.primaryColorLight }}
+      style={{ backgroundColor: Colors.backgroundColor, marginBottom: 6 }}
+      labelStyle={{
+        fontSize: 14,
+        fontFamily: "Urbanist_700Bold",
+        letterSpacing: 0.4,
+      }}
+      inactiveColor={Colors.textDark}
+      activeColor={Colors.primaryColorLight}
+    />
+  );
+
+  let [fontsLoaded, fontError] = useFonts({
+    Urbanist_700Bold,
+    Urbanist_500Medium,
+    Urbanist_400Regular,
+  });
+
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+  return (
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeContainer}>
+        <Tabs.Container
+          renderHeader={renderFlatListHeader}
+          headerContainerStyle={{ backgroundColor: Colors.backgroundColor }}
+          renderTabBar={tabBar}
+        >
+          <Tabs.Tab name="Trailer">
+            <Tabs.FlatList
+              data={trailer}
+              keyExtractor={(item) => item.id.toString()}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, index }) => {
                 return (
-                  <View
-                    style={{
-                      backgroundColor: Colors.backgroundColor,
-                      flexDirection: "row",
-                    }}
-                  >
-                    <View
-                      style={{
-                        flex: 33,
-                        paddingVertical: 10,
-                        borderBottomColor:
-                          index == 0 ? Colors.primaryColorLight : "transparent",
-                        borderBottomWidth: 3,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "Urbanist_500Medium",
-                          color:
-                            index == 0 ? Colors.primaryColorLight : "white",
-                          fontSize: 16,
-                          textAlign: "center",
-                        }}
-                      >
-                        Comments
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flex: 33,
-                        paddingVertical: 10,
-                        borderBottomColor:
-                          index == 1 ? Colors.primaryColorLight : "transparent",
-                        borderBottomWidth: 3,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "Urbanist_500Medium",
-                          color:
-                            index == 1 ? Colors.primaryColorLight : "white",
-                          fontSize: 16,
-                          textAlign: "center",
-                        }}
-                      >
-                        Trailers
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flex: 33,
-                        paddingVertical: 10,
-                        borderBottomColor:
-                          index == 2 ? Colors.primaryColorLight : "transparent",
-                        borderBottomWidth: 3,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: "Urbanist_500Medium",
-                          color:
-                            index == 2 ? Colors.primaryColorLight : "white",
-                          fontSize: 16,
-                          textAlign: "center",
-                        }}
-                      >
-                        More like this
-                      </Text>
-                    </View>
+                  <View style={{ marginVertical: 8 }} key={index}>
+                    <TrailerCard trailerInfo={item}></TrailerCard>
                   </View>
                 );
               }}
-              renderScene={renderScene}
-              onIndexChange={setIndex}
-              initialLayout={{ width: SIZES.width }}
             />
-          </View>
-        </View>
+          </Tabs.Tab>
+
+          <Tabs.Tab name="Comment">
+            <Tabs.ScrollView>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 16,
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Urbanist_700Bold",
+                    letterSpacing: 0.6,
+                    fontSize: 20,
+                    color: "white",
+                    marginLeft: 20,
+                  }}
+                >
+                  {moviesReviews.length} Reviews
+                </Text>
+                <TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: "Urbanist_500Medium",
+                      letterSpacing: 0.4,
+                      fontSize: 14,
+                      color: Colors.primaryColorLight,
+                      marginRight: 20,
+                    }}
+                  >
+                    See all
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {moviesReviews.length > 0 &&
+                moviesReviews
+                  .filter((item) => {
+                    return item.author_details.avatar_path != null;
+                  })
+                  .map(({ item, index }) => {
+                    return (
+                      <View
+                        style={{ marginHorizontal: 20, marginVertical: 20 }}
+                        key={index}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            gap: 12,
+                            alignItems: "center",
+                            marginBottom: 16,
+                          }}
+                        >
+                          <Image
+                            style={{ width: 36, height: 36, borderRadius: 36 }}
+                            source={{
+                              uri: `https://image.tmdb.org/t/p/w200${item?.author_details?.avatar_path}`,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              color: "white",
+                              fontSize: 16,
+                              fontFamily: "Urbanist_700Bold",
+                              letterSpacing: 0.4,
+                            }}
+                          >
+                            {item?.author}
+                          </Text>
+                        </View>
+                        <Text
+                          style={{
+                            color: "white",
+                            fontSize: 14,
+                            fontFamily: "Urbanist_400Regular",
+                          }}
+                        >
+                          {item?.content?.length > 200
+                            ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                            : item?.content}
+                        </Text>
+                      </View>
+                    );
+                  })}
+            </Tabs.ScrollView>
+          </Tabs.Tab>
+
+          <Tabs.Tab name="More Like This">
+            <Tabs.FlatList
+              data={similarMovies.filter((item) => {
+                return item.vote_average > 0;
+              })}
+              numColumns={2}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal={false}
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={{ justifyContent: "center" }}
+              renderItem={({ item, index }) => (
+                <View style={{ margin: 10 }} key={index}>
+                  <MovieCard movieItem={item} size="XL" setTitle={true} />
+                </View>
+              )}
+            />
+          </Tabs.Tab>
+        </Tabs.Container>
       </SafeAreaView>
-    </ScrollView>
+    </View>
   );
 };
 

@@ -63,7 +63,7 @@ const MovieCard = ({ movieItem, size, setTitle }) => {
                     fontFamily: "Urbanist_500Medium",
                   }}
                 >
-                  {movieItem?.vote_average.toFixed(1)}
+                  {movieItem?.vote_average?.toFixed(1)}
                 </Text>
               </View>
             </View>

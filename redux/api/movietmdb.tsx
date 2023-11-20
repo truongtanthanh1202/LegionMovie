@@ -98,3 +98,11 @@ export const fetchTvSeriesCreditsInfo = (id: string) => {
 export const fetchTrailerMovies = (id: string) => {
   return apiCall(`https://api.themoviedb.org/3/movie/${id}/videos`);
 };
+
+export const fetchMoviesReviews = (id: string) => {
+  return apiCall(`https://api.themoviedb.org/3/movie/${id}/reviews`);
+};
+
+export const fetchSimilarMovies = (id: string) => {
+  return apiCall(`https://api.themoviedb.org/3/movie/${id}/similar`);
+};

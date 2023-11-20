@@ -35,6 +35,8 @@ const Splash = ({ navigation }) => {
   }, [isLoadingData]);
 
   const getFilmData = async () => {
+    setIsLoadingData(true);
+
     const dataTrendingMoviesDay = await fetchTrendingMoviesDay();
     if (dataTrendingMoviesDay && dataTrendingMoviesDay.results) {
       handlerSetTrendingMoviesDay(dataTrendingMoviesDay.results);
