@@ -26,8 +26,10 @@ import {
 } from "@expo-google-fonts/urbanist";
 import RegisterVerified from "../../assets/svg/RegisterVerified";
 import { Dropdown } from "react-native-element-dropdown";
+import { AuthenticationHook } from "../../redux/hook/AuthenticationHook";
 
 const SetupProfile = ({ navigation }) => {
+  const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
   const [value, setValue] = React.useState(null);
   const [fullname, setFullname] = React.useState("");
   const [nickname, setNickname] = React.useState("");
@@ -66,8 +68,8 @@ const SetupProfile = ({ navigation }) => {
   };
 
   const handlerToHome = () => {
+    handlerSetIsSignIn(true);
     setModalVisible(false);
-    navigation.navigate("BottomTab");
   };
   return (
     <>

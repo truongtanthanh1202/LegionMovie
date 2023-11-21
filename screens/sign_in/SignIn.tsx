@@ -23,8 +23,10 @@ import {
 } from "@expo-google-fonts/urbanist";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { isValidEmail, isValidPassword } from "../../auth/ValidateInput";
+import { AuthenticationHook } from "../../redux/hook/AuthenticationHook";
 
 const SignIn = ({ navigation }) => {
+  const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
@@ -41,7 +43,6 @@ const SignIn = ({ navigation }) => {
   }
 
   const handlerSignIn = () => {
-    navigation.navigate("BottomTab");
     console.log(
       "Handler Sign In with: Email." +
         email +
@@ -50,6 +51,7 @@ const SignIn = ({ navigation }) => {
         "  Remember." +
         rememberUser
     );
+    handlerSetIsSignIn(true);
   };
   const handlerSignInWithFacebook = () => {};
   const handlerSignInWithGoogle = () => {};

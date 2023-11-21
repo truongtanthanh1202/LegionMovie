@@ -37,6 +37,54 @@ import TrailerCard from "./TrailerCard";
 import { Tabs, MaterialTabBar } from "react-native-collapsible-tab-view";
 import MovieCard from "../../components/atoms/movie_card";
 
+const mockReviews = [
+  {
+    author: "bradley",
+    author_details: {
+      name: "bradley",
+      username: "ivebeenspringlocked",
+      avatar_path: "/yyyRXn3sLTq9NTL4sNpJ2gJAcBe.png",
+      rating: 9,
+    },
+    content:
+      "FNAF was great, Kinda wish it had blood, Every kill was offscreen or really dark and you cant really see the kill.",
+    created_at: "2023-10-26T11:17:37.038Z",
+    id: "653a4ad08a0e9b010b29016c",
+    updated_at: "2023-11-01T16:19:28.585Z",
+    url: "https://www.themoviedb.org/review/653a4ad08a0e9b010b29016c",
+  },
+  {
+    author: "MustachedMovieMan",
+    author_details: {
+      name: "",
+      username: "MustachedMovieMan",
+      avatar_path: "/eQAHVuTOyW6IkFzm9llwW8Czj4l.png",
+      rating: 7,
+    },
+    content:
+      "I don't really get what all the negative reviews are about.\r\nIt's not the best movie ever or that I've seen this year, but I still had a good time watching it. The story was interesting, it had some scary parts, some humorous parts, lots of tension, was well-acted, well-shot, and the effects (both practical and CGI) were well-done. Also, the production design and creature design was great.\r\n\r\nA movie doesn't have to be restricted to either being \"the best\" or \"horrible.\" The theater I saw it in was packed, the audience was responsive and seemed to be loving it, and I myself enjoyed it.\r\n\r\nI didn't really play the games, but I was definitely engaged in the lore of some of the MatPat Game Theory videos I saw. And I could tell from audience reactions that there were some cool things in the movie if you knew the games. That's not a negative, to be clear. It's always really cool when filmmakers put things in movies that true fans would catch and geek-out about.\r\n\r\nAs far as being a viewer who didn't really play the games, I enjoyed the movie. And while I think knowing the games/lore would have definitely enhanced my enjoyment and enthusiasm, I wouldn't say it lacks as a movie or that the games are \"required viewing\" for those who haven't played them. Everything's explained pretty well.\r\n\r\nAs far as the horror aspect goes, it is PG-13; I saw some reviews complaining about the lack of gore... It's PG-13. C'mon guys.\r\nBut, that being said, I thought they still did a good job with the horror elements that were present.\r\n\r\nI also really liked the trio of main characters. I thought Josh Hutcherson, Piper Rubio, and Elizabeth Lail all did a good job.\r\nAlso, I'm glad Josh Hutcherson is back. I hope he'll continue to be in more movies.",
+    created_at: "2023-10-27T19:10:26.626Z",
+    id: "653c0b22564ec700e5fa4168",
+    updated_at: "2023-11-01T16:19:08.485Z",
+    url: "https://www.themoviedb.org/review/653c0b22564ec700e5fa4168",
+  },
+  {
+    author: "CinemaSerf",
+    author_details: {
+      name: "CinemaSerf",
+      username: "Geronimo1967",
+      avatar_path: "/1kks3YnVkpyQxzw36CObFPvhL5f.jpg",
+      rating: 5,
+    },
+    content:
+      'Didn\'t Josh Hutcherson used to be famous? Well here he is reduced to the role of the struggling brother of "Abby" (Piper Rubio). Their aunt (Mary Stuart Masterson) is determined that this hapless bag of bones isn\'t fit to look after the young girl - after he takes out a visiting father in the fountain of a shopping mall and gets fired; so "Mike" has to get another job! Opportunities are thin on the ground, but there is a vacancy doing the security night shift and an old, derelict, pizza parlour. How hard can it be? Well a meeting with the enigmatic police officer "Vanessa" (Elizabeth Lail) should have rung alarm bells, and when he has to take "Abby" there for one overnight shift - well it\'s soon clear that this place has secrets to keep and that it knows how to manipulate the hopes and fears of "Mike" and his sister. Can they stay sane and focussed long enough to survive this maze of malevolent mechanical bunnies? I\'m afraid the presence of Matthew Lillard never helps a film, and here is no different - this is just a rather nonsensical attempt at a spooky mystery that certainly has nothing to make you jump. Rubio is actually quite decent, but there\'s isn\'t enough else happening to compensate for the very slow build up, surfeit of dialogue and frankly rather silly underlying premiss. I suppose as Halloween gets bigger and bigger, we are going to get more and more of these mediocre offerings - but despite it\'s more prominent cast, this just belongs on the Horror channel at 2am.',
+    created_at: "2023-11-02T09:34:31.341Z",
+    id: "65436d2741a561336b763051",
+    updated_at: "2023-11-02T09:34:31.443Z",
+    url: "https://www.themoviedb.org/review/65436d2741a561336b763051",
+  },
+];
+
 const MovieDetail = ({ navigation, route }) => {
   const {
     handlerAddMyListItem,
@@ -50,7 +98,7 @@ const MovieDetail = ({ navigation, route }) => {
   const [castsInfo, setCastInfo] = React.useState([]);
   const [trailer, setTrailer] = React.useState([]);
   const [similarMovies, setSimilarMovies] = React.useState([]);
-  const [moviesReviews, setMoviesReviews] = React.useState([]);
+  const [moviesReviews, setMoviesReviews] = React.useState(mockReviews);
 
   const { movieItem } = route.params;
   const movieID = movieItem.id;
@@ -85,11 +133,16 @@ const MovieDetail = ({ navigation, route }) => {
     console.log(trailer);
   };
 
+  const handlerToCommentScreen = () => {
+    navigation.navigate("Comments", {
+      commentGroup: moviesReviews,
+    });
+  };
+
   React.useEffect(() => {
     getCastsMovieData();
     // getCastsTvSeriesData();
     getTrailerMovies();
-    getMoviesReview();
     getSimilarMovies();
   }, []);
 
@@ -106,11 +159,6 @@ const MovieDetail = ({ navigation, route }) => {
   const getTrailerMovies = async () => {
     const data = await fetchTrailerMovies(movieID);
     if (data) setTrailer(data.results);
-  };
-
-  const getMoviesReview = async () => {
-    const data = await fetchMoviesReviews(movieID);
-    if (data) setMoviesReviews(data.results);
   };
 
   const getSimilarMovies = async () => {
@@ -542,7 +590,7 @@ const MovieDetail = ({ navigation, route }) => {
                 >
                   {moviesReviews.length} Reviews
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handlerToCommentScreen}>
                   <Text
                     style={{
                       fontFamily: "Urbanist_500Medium",
@@ -556,56 +604,51 @@ const MovieDetail = ({ navigation, route }) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              {moviesReviews.length > 0 &&
-                moviesReviews
-                  .filter((item) => {
-                    return item.author_details.avatar_path != null;
-                  })
-                  .map(({ item, index }) => {
-                    return (
-                      <View
-                        style={{ marginHorizontal: 20, marginVertical: 20 }}
-                        key={index}
+              {moviesReviews.map((item, index) => {
+                return (
+                  <View
+                    style={{ marginHorizontal: 20, marginVertical: 20 }}
+                    key={index}
+                  >
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        gap: 12,
+                        alignItems: "center",
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Image
+                        style={{ width: 36, height: 36, borderRadius: 36 }}
+                        source={{
+                          uri: `https://image.tmdb.org/t/p/w200${item.author_details.avatar_path}`,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          color: "white",
+                          fontSize: 16,
+                          fontFamily: "Urbanist_700Bold",
+                          letterSpacing: 0.4,
+                        }}
                       >
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            gap: 12,
-                            alignItems: "center",
-                            marginBottom: 16,
-                          }}
-                        >
-                          <Image
-                            style={{ width: 36, height: 36, borderRadius: 36 }}
-                            source={{
-                              uri: `https://image.tmdb.org/t/p/w200${item?.author_details?.avatar_path}`,
-                            }}
-                          />
-                          <Text
-                            style={{
-                              color: "white",
-                              fontSize: 16,
-                              fontFamily: "Urbanist_700Bold",
-                              letterSpacing: 0.4,
-                            }}
-                          >
-                            {item?.author}
-                          </Text>
-                        </View>
-                        <Text
-                          style={{
-                            color: "white",
-                            fontSize: 14,
-                            fontFamily: "Urbanist_400Regular",
-                          }}
-                        >
-                          {item?.content?.length > 200
-                            ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                            : item?.content}
-                        </Text>
-                      </View>
-                    );
-                  })}
+                        {item.author}
+                      </Text>
+                    </View>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 14,
+                        fontFamily: "Urbanist_400Regular",
+                      }}
+                    >
+                      {item.content.length > 200
+                        ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                        : item.content}
+                    </Text>
+                  </View>
+                );
+              })}
             </Tabs.ScrollView>
           </Tabs.Tab>
 
