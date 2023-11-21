@@ -7,7 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, { lazy } from "react";
+import React from "react";
 import styles from "./Style";
 import {
   Feather,
@@ -27,7 +27,6 @@ import { SIZES } from "../../constant/Constant";
 import { Categories } from "../../constant/Categories";
 import {
   fetchMovieCreditsInfo,
-  fetchMoviesReviews,
   fetchSimilarMovies,
   fetchTrailerMovies,
   fetchTvSeriesCreditsInfo,
@@ -36,6 +35,7 @@ import { MyListHook } from "../../redux/hook/HandlerMyListHook";
 import TrailerCard from "./TrailerCard";
 import { Tabs, MaterialTabBar } from "react-native-collapsible-tab-view";
 import MovieCard from "../../components/atoms/movie_card";
+import VideoHeader from "./VideoHeader";
 
 const mockReviews = [
   {
@@ -130,7 +130,7 @@ const MovieDetail = ({ navigation, route }) => {
   };
 
   const handlerPlayVideo = () => {
-    console.log(trailer);
+    navigation.navigate("VideoScreen");
   };
 
   const handlerToCommentScreen = () => {
@@ -169,20 +169,17 @@ const MovieDetail = ({ navigation, route }) => {
   const renderFlatListHeader = () => {
     return (
       <>
-        <ImageBackground
-          style={styles.image}
-          resizeMode="cover"
-          source={{
-            uri: `https://image.tmdb.org/t/p/w500${posterPath}`,
-          }}
-        >
+        <View>
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
               alignItems: "center",
-              marginTop: 20,
+              marginTop: 16,
               marginHorizontal: 20,
+              position: "absolute",
+              right: 0,
+              left: 0,
+              zIndex: 2,
             }}
           >
             <TouchableOpacity
@@ -197,11 +194,15 @@ const MovieDetail = ({ navigation, route }) => {
                 color={Colors.primaryColorLight}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.shadow}>
+            <TouchableOpacity
+              style={{ ...styles.shadow, marginLeft: SIZES.width - 88 }}
+            >
               <Feather name="airplay" size={24} color="white" />
             </TouchableOpacity>
           </View>
-        </ImageBackground>
+          <VideoHeader posterPath={movieItem?.backdrop_path} />
+        </View>
+
         {/* Body */}
         <View style={{ marginHorizontal: 20, marginTop: 20 }}>
           {/* Film name, saved, share */}

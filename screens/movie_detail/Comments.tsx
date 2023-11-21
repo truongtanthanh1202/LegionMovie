@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  Image,
 } from "react-native";
 import React from "react";
 import { Colors } from "../../constant/Color";
@@ -53,7 +54,44 @@ const Comments = ({ navigation, route }) => {
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
             renderItem={({ item, index }) => (
-              <View style={{ marginRight: 16 }} key={index}></View>
+              <View style={{ marginBottom: 20 }} key={index}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 12,
+                    alignItems: "center",
+                    marginBottom: 16,
+                  }}
+                >
+                  <Image
+                    style={{ width: 36, height: 36, borderRadius: 36 }}
+                    source={{
+                      uri: `https://image.tmdb.org/t/p/w200${item.author_details.avatar_path}`,
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: "white",
+                      fontSize: 16,
+                      fontFamily: "Urbanist_700Bold",
+                      letterSpacing: 0.4,
+                    }}
+                  >
+                    {item.author}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    color: "white",
+                    fontSize: 14,
+                    fontFamily: "Urbanist_400Regular",
+                  }}
+                >
+                  {item.content.length > 200
+                    ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                    : item.content}
+                </Text>
+              </View>
             )}
           />
         </View>
@@ -82,7 +120,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
   },
   body: {
-    backgroundColor: "gray",
     marginHorizontal: 20,
     flex: 1,
     marginTop: 20,

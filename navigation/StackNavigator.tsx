@@ -16,6 +16,7 @@ import MovieCard from "../components/atoms/movie_card";
 import MovieDetail from "../screens/movie_detail/MovieDetail";
 import Notification from "../screens/profile/Notification";
 import Comments from "../screens/movie_detail/Comments";
+import VideoScreen from "../screens/movie_detail/VideoScreen";
 
 import { AuthenticationHook } from "../redux/hook/AuthenticationHook";
 
@@ -23,7 +24,8 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
   const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
-  const isSignIn = handlerGetIsSignIn();
+  // const isSignIn = handlerGetIsSignIn();
+  const isSignIn = true;
 
   return (
     <NavigationContainer>
@@ -36,6 +38,7 @@ const StackNavigator = () => {
             <Stack.Screen name="MovieDetail" component={MovieDetail} />
             <Stack.Screen name="Notification" component={Notification} />
             <Stack.Screen name="Comments" component={Comments} />
+            <Stack.Screen name="VideoScreen" component={VideoScreen} />
           </>
         ) : (
           <>
