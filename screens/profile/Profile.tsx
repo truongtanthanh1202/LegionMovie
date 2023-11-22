@@ -10,9 +10,11 @@ import {
 import LongListCard from "../../components/atoms/long_list_card";
 import { FontAwesome, Feather, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { AuthenticationHook } from "../../redux/hook/AuthenticationHook";
 
 const Profile = () => {
   const navigation = useNavigation();
+  const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
   const navigateToEditProfile = () => {
     console.log("navigateToEditProfile");
   };
@@ -24,6 +26,9 @@ const Profile = () => {
   };
   const navigateToSercurity = () => {
     console.log("navigateToSercurity");
+  };
+  const handlerLogout = () => {
+    handlerSetIsSignIn(false);
   };
 
   let [fontsLoaded, fontError] = useFonts({
@@ -110,6 +115,12 @@ const Profile = () => {
               title="Sercurity"
               type="Normal"
               onPress={navigateToSercurity}
+            />
+            <LongListCard
+              leftIcon={<Feather name="log-out" size={20} color="white" />}
+              title="Logout"
+              type="Normal"
+              onPress={handlerLogout}
             />
           </View>
         </View>
