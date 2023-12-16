@@ -16,7 +16,7 @@ const Profile = () => {
   const navigation = useNavigation();
   const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
   const navigateToEditProfile = () => {
-    console.log("navigateToEditProfile");
+    navigation.navigate("EditProfile");
   };
   const navigateToNoti = () => {
     navigation.navigate("Notification");

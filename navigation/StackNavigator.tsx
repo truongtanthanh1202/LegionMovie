@@ -19,6 +19,7 @@ import Comments from "../screens/movie_detail/Comments";
 import VideoScreen from "../screens/movie_detail/VideoScreen";
 import Security from "../screens/profile/sercurity/Security";
 import ChangePassword from "../screens/profile/sercurity/ChangePassword";
+import EditProfile from "../screens/profile/edit_profile/EditProfile";
 
 import { AuthenticationHook } from "../redux/hook/AuthenticationHook";
 
@@ -43,6 +44,7 @@ const StackNavigator = () => {
             <Stack.Screen name="VideoScreen" component={VideoScreen} />
             <Stack.Screen name="Security" component={Security} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
+            <Stack.Screen name="EditProfile" component={EditProfile} />
           </>
         ) : (
           <>
