@@ -26,20 +26,19 @@ import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
 import { UserProfileHook } from "../../../redux/hook/UserProfileHook";
 
-const ImageViewer = ({ placeholderImageSource, selectedImage }) => {
-  const imageSource = selectedImage
-    ? { uri: selectedImage }
-    : placeholderImageSource;
-
-  return (
-    <Image
-      source={imageSource}
-      style={{ width: "100%", height: "100%", borderRadius: 500 }}
-    />
-  );
-};
-
 const EditProfile = ({ navigation }) => {
+  const ImageViewer = ({ placeholderImageSource, selectedImage }) => {
+    const imageSource = selectedImage
+      ? { uri: selectedImage }
+      : { uri: placeholderImageSource };
+
+    return (
+      <Image
+        source={imageSource}
+        style={{ width: "100%", height: "100%", borderRadius: 500 }}
+      />
+    );
+  };
   const [isDisabledButton, setIsDisabledButton] = React.useState(false);
 
   const {
@@ -59,7 +58,7 @@ const EditProfile = ({ navigation }) => {
   const [email, setEmail] = React.useState(getAllProfile().email);
   const [value, setValue] = React.useState(getAllProfile().gender);
 
-  const PlaceholderImage = getAllProfile().profilePicturePath;
+  const PlaceholderImage = "https://reactnative.dev/img/tiny_logo.png";
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,

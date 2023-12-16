@@ -22,7 +22,7 @@ const Profile = () => {
     navigation.navigate("Notification");
   };
   const navigateToDownLoad = () => {
-    console.log("navigateToDownLoad");
+    navigation.navigate("DownLoad");
   };
   const navigateToSercurity = () => {
     navigation.navigate("Security");

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const UserProfileSlice = createSlice({
   name: "UserProfile",
   initialState: {
-    profilePicturePath: require("../../assets/icon/user-90.png"),
+    profilePicturePath: "https://reactnative.dev/img/tiny_logo.png",
     fullName: "Truong Tan Thanh",
     nickName: "truongtanthanh1202",
     email: "truongtanthanh1202@gmail.com",

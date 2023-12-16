@@ -20,6 +20,8 @@ import VideoScreen from "../screens/movie_detail/VideoScreen";
 import Security from "../screens/profile/sercurity/Security";
 import ChangePassword from "../screens/profile/sercurity/ChangePassword";
 import EditProfile from "../screens/profile/edit_profile/EditProfile";
+import DownLoad from "../screens/profile/download/DownLoad";
+import DownLoadSetting from "../screens/profile/download/DownLoadSetting";
 
 import { AuthenticationHook } from "../redux/hook/AuthenticationHook";
 
@@ -27,8 +29,8 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
   const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
-  // const isSignIn = handlerGetIsSignIn();
-  const isSignIn = true;
+  const isSignIn = handlerGetIsSignIn();
+  // const isSignIn = true;
 
   return (
     <NavigationContainer>
@@ -45,6 +47,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Security" component={Security} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
             <Stack.Screen name="EditProfile" component={EditProfile} />
+            <Stack.Screen name="DownLoad" component={DownLoad} />
+            <Stack.Screen name="DownLoadSetting" component={DownLoadSetting} />
           </>
         ) : (
           <>
