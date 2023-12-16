@@ -25,7 +25,7 @@ const Profile = () => {
     console.log("navigateToDownLoad");
   };
   const navigateToSercurity = () => {
-    console.log("navigateToSercurity");
+    navigation.navigate("Security");
   };
   const handlerLogout = () => {
     handlerSetIsSignIn(false);
@@ -79,18 +79,6 @@ const Profile = () => {
           {/* other tabs */}
           <View style={styles.tabsContainer}>
             <LongListCard
-              leftIcon={<FontAwesome name="user-o" size={20} color="white" />}
-              title="Edit Profile"
-              type="Normal"
-              onPress={navigateToEditProfile}
-            />
-            <LongListCard
-              leftIcon={<Feather name="bell" size={20} color="white" />}
-              title="Notification"
-              type="Normal"
-              onPress={navigateToNoti}
-            />
-            <LongListCard
               leftIcon={
                 <Ionicons
                   name="cloud-download-outline"
@@ -101,6 +89,18 @@ const Profile = () => {
               title="Download"
               type="Normal"
               onPress={navigateToDownLoad}
+            />
+            <LongListCard
+              leftIcon={<FontAwesome name="user-o" size={20} color="white" />}
+              title="Edit Profile"
+              type="Normal"
+              onPress={navigateToEditProfile}
+            />
+            <LongListCard
+              leftIcon={<Feather name="bell" size={20} color="white" />}
+              title="Notification"
+              type="Normal"
+              onPress={navigateToNoti}
             />
             <LongListCard
               leftIcon={

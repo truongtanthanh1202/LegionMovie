@@ -17,6 +17,8 @@ import MovieDetail from "../screens/movie_detail/MovieDetail";
 import Notification from "../screens/profile/Notification";
 import Comments from "../screens/movie_detail/Comments";
 import VideoScreen from "../screens/movie_detail/VideoScreen";
+import Security from "../screens/profile/sercurity/Security";
+import ChangePassword from "../screens/profile/sercurity/ChangePassword";
 
 import { AuthenticationHook } from "../redux/hook/AuthenticationHook";
 
@@ -39,6 +41,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Notification" component={Notification} />
             <Stack.Screen name="Comments" component={Comments} />
             <Stack.Screen name="VideoScreen" component={VideoScreen} />
+            <Stack.Screen name="Security" component={Security} />
+            <Stack.Screen name="ChangePassword" component={ChangePassword} />
           </>
         ) : (
           <>
