@@ -24,6 +24,7 @@ import {
 } from "@expo-google-fonts/urbanist";
 import { Dropdown } from "react-native-element-dropdown";
 import * as ImagePicker from "expo-image-picker";
+import { UserProfileHook } from "../../../redux/hook/UserProfileHook";
 
 const ImageViewer = ({ placeholderImageSource, selectedImage }) => {
   const imageSource = selectedImage
@@ -39,12 +40,26 @@ const ImageViewer = ({ placeholderImageSource, selectedImage }) => {
 };
 
 const EditProfile = ({ navigation }) => {
-  const [value, setValue] = React.useState("male");
-  const [fullname, setFullname] = React.useState("Truong Tan Thanh");
-  const [nickname, setNickname] = React.useState("truongtanthanh1202");
+  const [isDisabledButton, setIsDisabledButton] = React.useState(false);
 
-  const PlaceholderImage = require("../../../assets/icon/user-90.png");
-  const [selectedImage, setSelectedImage] = React.useState(null);
+  const {
+    getAllProfile,
+    handlerSetProfilePicturePath,
+    handlerSetFullName,
+    handlerSetNickName,
+    handlerSetEmail,
+    handlerSetGender,
+  } = UserProfileHook();
+
+  const [selectedImage, setSelectedImage] = React.useState(
+    getAllProfile().profilePicturePath
+  );
+  const [fullname, setFullname] = React.useState(getAllProfile().fullName);
+  const [nickname, setNickname] = React.useState(getAllProfile().nickName);
+  const [email, setEmail] = React.useState(getAllProfile().email);
+  const [value, setValue] = React.useState(getAllProfile().gender);
+
+  const PlaceholderImage = getAllProfile().profilePicturePath;
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
@@ -64,8 +79,13 @@ const EditProfile = ({ navigation }) => {
   };
 
   const handlerChangeProfile = () => {
-    console.log(fullname, nickname, value);
+    console.log(fullname, nickname, email, value);
     console.log(selectedImage);
+    handlerSetProfilePicturePath(selectedImage);
+    handlerSetFullName(fullname);
+    handlerSetNickName(nickname);
+    // handlerSetEmail(email);
+    handlerSetGender(value);
   };
 
   let [fontsLoaded, fontError] = useFonts({
@@ -226,7 +246,7 @@ const EditProfile = ({ navigation }) => {
                           opacity: 0.7,
                           color: Colors.primaryColorDark,
                         }}
-                        value="truongtanthanh1202@gmail.com"
+                        value={email}
                         editable={false}
                       />
                       <Ionicons

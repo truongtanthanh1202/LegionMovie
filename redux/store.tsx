@@ -3,6 +3,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import MyListSlice from "./slice/MyListSlice";
 import FilmStoreSlice from "./slice/FilmStoreSlice";
 import AuthenticationSlice from "./slice/AuthenticationSlice";
+import UserProfileSlice from "./slice/UserProfileSlice";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -13,6 +14,7 @@ export const store = configureStore({
     MyList: MyListSlice,
     FilmStore: FilmStoreSlice,
     Authentication: AuthenticationSlice,
+    UserProfile: UserProfileSlice,
   },
 });
 
