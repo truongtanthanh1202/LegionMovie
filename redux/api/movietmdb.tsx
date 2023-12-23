@@ -99,10 +99,18 @@ export const fetchTrailerMovies = (id: string) => {
   return apiCall(`https://api.themoviedb.org/3/movie/${id}/videos`);
 };
 
+export const fetchTrailerTVs = (id: string) => {
+  return apiCall(`https://api.themoviedb.org/3/tv/${id}/videos`);
+};
+
 export const fetchMoviesReviews = (id: string) => {
   return apiCall(`https://api.themoviedb.org/3/movie/${id}/reviews`);
 };
 
 export const fetchSimilarMovies = (id: string) => {
   return apiCall(`https://api.themoviedb.org/3/movie/${id}/similar`);
+};
+
+export const fetchSimilarTVs = (id: string) => {
+  return apiCall(`https://api.themoviedb.org/3/tv/${id}/similar`);
 };

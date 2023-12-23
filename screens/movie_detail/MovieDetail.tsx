@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   SafeAreaView,
-  ImageBackground,
   Image,
   TouchableOpacity,
 } from "react-native";
@@ -30,12 +29,17 @@ import {
   fetchSimilarMovies,
   fetchTrailerMovies,
   fetchTvSeriesCreditsInfo,
+  fetchSimilarTVs,
+  fetchTrailerTVs,
 } from "../../redux/api/movietmdb";
 import { MyListHook } from "../../redux/hook/HandlerMyListHook";
 import TrailerCard from "./TrailerCard";
 import { Tabs, MaterialTabBar } from "react-native-collapsible-tab-view";
 import MovieCard from "../../components/atoms/movie_card";
 import VideoHeader from "./VideoHeader";
+import * as FileSystem from "expo-file-system";
+import { shareAsync } from "expo-sharing";
+import { Platform } from "react-native";
 
 const mockReviews = [
   {
@@ -102,13 +106,19 @@ const MovieDetail = ({ navigation, route }) => {
 
   const { movieItem } = route.params;
   const movieID = movieItem.id;
-  const posterPath = movieItem.poster_path;
+  const posterPath = movieItem?.poster_path;
+  const backdropPath = movieItem?.backdrop_path;
   const movieName = movieItem.title;
   const tvName = movieItem?.name;
   const vote_average = movieItem.vote_average;
   const vote_count = movieItem.vote_count;
   const genre_ids = movieItem.genre_ids;
   const overview = movieItem.overview;
+
+  React.useEffect(() => {
+    console.log("movie name: " + movieName);
+    console.log("tv name: " + tvName);
+  }, []);
 
   const isMovieDuplicate = checkDuplicate(movieID);
   const handerAddThisFilmToMylist = () => {
@@ -140,10 +150,16 @@ const MovieDetail = ({ navigation, route }) => {
   };
 
   React.useEffect(() => {
-    getCastsMovieData();
-    // getCastsTvSeriesData();
-    getTrailerMovies();
-    getSimilarMovies();
+    if (tvName) {
+      getCastsTvSeriesData();
+      getTrailerTVs();
+      getSimilarTVs();
+    }
+    if (movieName) {
+      getCastsMovieData();
+      getTrailerMovies();
+      getSimilarMovies();
+    }
   }, []);
 
   const getCastsMovieData = async () => {
@@ -161,9 +177,56 @@ const MovieDetail = ({ navigation, route }) => {
     if (data) setTrailer(data.results);
   };
 
+  const getTrailerTVs = async () => {
+    const data = await fetchTrailerTVs(movieID);
+    if (data) setTrailer(data.results);
+  };
+
   const getSimilarMovies = async () => {
     const data = await fetchSimilarMovies(movieID);
     if (data) setSimilarMovies(data.results);
+  };
+
+  const getSimilarTVs = async () => {
+    const data = await fetchSimilarTVs(movieID);
+    if (data) setSimilarMovies(data.results);
+  };
+
+  const save = async (uri, filename, mimetype) => {
+    if (Platform.OS === "android") {
+      const permissions =
+        await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+      if (permissions.granted) {
+        const base64 = await FileSystem.readAsStringAsync(uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        await FileSystem.StorageAccessFramework.createFileAsync(
+          permissions.directoryUri,
+          filename,
+          mimetype
+        )
+          .then(async (uri) => {
+            await FileSystem.writeAsStringAsync(uri, base64, {
+              encoding: FileSystem.EncodingType.Base64,
+            });
+          })
+          .catch((e) => console.log(e));
+      } else {
+        shareAsync(uri);
+      }
+    } else {
+      shareAsync(uri);
+    }
+  };
+
+  const downLoadThisMovieTv = async (filename) => {
+    const result = await FileSystem.downloadAsync(
+      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      FileSystem.documentDirectory + movieID
+    );
+    console.log(result);
+
+    save(result.uri, filename, result.headers["Content-Type"]);
   };
 
   const renderFlatListHeader = () => {
@@ -200,7 +263,7 @@ const MovieDetail = ({ navigation, route }) => {
               <Feather name="airplay" size={24} color="white" />
             </TouchableOpacity>
           </View>
-          <VideoHeader posterPath={movieItem?.backdrop_path} />
+          <VideoHeader posterPath={backdropPath} />
         </View>
 
         {/* Body */}
@@ -373,6 +436,7 @@ const MovieDetail = ({ navigation, route }) => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={downLoadThisMovieTv}
               style={{
                 ...styles.button,
                 backgroundColor: Colors.backgroundColor,
@@ -412,6 +476,7 @@ const MovieDetail = ({ navigation, route }) => {
               >
                 Genre:{" "}
               </Text>
+
               {genre_ids.map((item: number, index: number) => {
                 return (
                   <Text
@@ -423,7 +488,9 @@ const MovieDetail = ({ navigation, route }) => {
                       fontSize: 14,
                     }}
                   >
-                    {Categories.MOVIES[item]}
+                    {tvName
+                      ? Categories.TV_SHOW[item]
+                      : Categories.MOVIES[item]}
                     {", "}
                   </Text>
                 );
@@ -556,18 +623,38 @@ const MovieDetail = ({ navigation, route }) => {
           renderTabBar={tabBar}
         >
           <Tabs.Tab name="Trailer">
-            <Tabs.FlatList
-              data={trailer}
-              keyExtractor={(item) => item.id.toString()}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item, index }) => {
-                return (
-                  <View style={{ marginVertical: 8 }} key={index}>
-                    <TrailerCard trailerInfo={item}></TrailerCard>
-                  </View>
-                );
-              }}
-            />
+            {trailer.length > 0 ? (
+              <Tabs.FlatList
+                data={trailer}
+                keyExtractor={(item) => item.id.toString()}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => {
+                  return (
+                    <View style={{ marginVertical: 8 }} key={index}>
+                      <TrailerCard trailerInfo={item}></TrailerCard>
+                    </View>
+                  );
+                }}
+              />
+            ) : (
+              <Tabs.ScrollView>
+                <View
+                  style={{
+                    flex: 1,
+                    backgroundColor: Colors.innerFieldBackground,
+                  }}
+                >
+                  <Text
+                    style={{ fontSize: 20, color: Colors.primaryColorLight }}
+                  >
+                    No Data
+                  </Text>
+                  <Text>
+                    {"This Movie/TV series has no trailer data yet :(("}
+                  </Text>
+                </View>
+              </Tabs.ScrollView>
+            )}
           </Tabs.Tab>
 
           <Tabs.Tab name="Comment">
