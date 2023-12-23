@@ -1,17 +1,17 @@
-import * as ScreenOrientation from "expo-screen-orientation";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   SafeAreaView,
-  Dimensions,
 } from "react-native";
 import React from "react";
 import { Colors } from "../../constant/Color";
-import { Video, ResizeMode } from "expo-av";
+import { ResizeMode, Video } from "expo-av";
 import VideoPlayer from "expo-video-player";
 import { SIZES } from "../../constant/Constant";
+import { StatusBar } from "expo-status-bar";
+import { Feather } from "@expo/vector-icons";
 
 const VideoScreen = ({ navigation, route }) => {
   const handlerGoBack = () => {
@@ -19,47 +19,51 @@ const VideoScreen = ({ navigation, route }) => {
   };
 
   const refVideo = React.useRef(null);
-
-  const [inFullscreen, setInFullsreen] = React.useState(false);
+  const videoExpoAv = () => {
+    return (
+      <>
+        <Video
+          ref={refVideo}
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+          }}
+          source={{
+            uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+          }}
+          useNativeControls
+          resizeMode={ResizeMode.CONTAIN}
+          isLooping
+          onPlaybackStatusUpdate={() => {}}
+        />
+      </>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar hidden={true} />
       <View style={{ ...styles.container }}>
-        <View style={styles.controllerContainer}>
-          <TouchableOpacity onPress={handlerGoBack}>
-            <Text style={{ color: "white" }}>Go Back</Text>
+        {videoExpoAv()}
+        <View>
+          <TouchableOpacity
+            onPress={handlerGoBack}
+            style={{
+              position: "absolute",
+              top: 10,
+              left: 10,
+            }}
+          >
+            <Feather
+              name="arrow-left"
+              size={24}
+              color={Colors.primaryColorDark}
+            />
           </TouchableOpacity>
         </View>
-        <VideoPlayer
-          style={{
-            videoBackgroundColor: Colors.innerFieldBackground,
-            height: inFullscreen ? SIZES.width - 40 : SIZES.height - 40,
-            width: inFullscreen ? SIZES.height : SIZES.width,
-          }}
-          videoProps={{
-            shouldPlay: false,
-            resizeMode: ResizeMode.CONTAIN,
-            source: {
-              uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-            },
-            ref: refVideo,
-          }}
-          slider={{
-            visible: true,
-          }}
-          timeVisible={true}
-          fullscreen={{
-            inFullscreen: inFullscreen,
-            enterFullscreen: () => {
-              setInFullsreen(true);
-              console.log("enter Fullscreen");
-            },
-            exitFullscreen: () => {
-              setInFullsreen(false);
-              console.log("exit Fullscreen");
-            },
-          }}
-        />
       </View>
     </SafeAreaView>
   );
@@ -71,13 +75,5 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.backgroundColor,
     flex: 1,
-  },
-  controllerContainer: {
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    zIndex: 0,
   },
 });
