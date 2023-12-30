@@ -39,7 +39,7 @@ const StackNavigator = () => {
           <>
             <Stack.Screen name="Splash" component={Splash} />
             <Stack.Screen name="BottomTab" component={BottomTab} />
-            <Stack.Screen name="MovieCard" component={MovieCard} />
+            {/* <Stack.Screen name="MovieCard" component={MovieCard} /> */}
             <Stack.Screen name="MovieDetail" component={MovieDetail} />
             <Stack.Screen name="Notification" component={Notification} />
             <Stack.Screen name="Comments" component={Comments} />

@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import React from "react";
 import styles from "./Style";
@@ -38,8 +39,6 @@ import { Tabs, MaterialTabBar } from "react-native-collapsible-tab-view";
 import MovieCard from "../../components/atoms/movie_card";
 import VideoHeader from "./VideoHeader";
 import * as FileSystem from "expo-file-system";
-import { shareAsync } from "expo-sharing";
-import { Platform } from "react-native";
 
 const mockReviews = [
   {
@@ -97,6 +96,8 @@ const MovieDetail = ({ navigation, route }) => {
     handlerFilterMyListItem,
     checkDuplicate,
   } = MyListHook();
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [modalType, setModalType] = React.useState("");
 
   const [showFullDescription, setShowFullDescription] = React.useState(false);
   const [castsInfo, setCastInfo] = React.useState([]);
@@ -192,42 +193,15 @@ const MovieDetail = ({ navigation, route }) => {
     if (data) setSimilarMovies(data.results);
   };
 
-  const save = async (uri, filename, mimetype) => {
-    if (Platform.OS === "android") {
-      const permissions =
-        await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
-      if (permissions.granted) {
-        const base64 = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        await FileSystem.StorageAccessFramework.createFileAsync(
-          permissions.directoryUri,
-          filename,
-          mimetype
-        )
-          .then(async (uri) => {
-            await FileSystem.writeAsStringAsync(uri, base64, {
-              encoding: FileSystem.EncodingType.Base64,
-            });
-          })
-          .catch((e) => console.log(e));
-      } else {
-        shareAsync(uri);
-      }
-    } else {
-      shareAsync(uri);
-    }
-  };
-
-  const downLoadThisMovieTv = async (filename) => {
+  const downLoadThisMovieTv = async () => {
     const result = await FileSystem.downloadAsync(
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      FileSystem.documentDirectory + movieID
+      FileSystem.cacheDirectory + movieID + (movieName || tvName)
     );
     console.log(result);
-
-    save(result.uri, filename, result.headers["Content-Type"]);
   };
+
+  const showModal = (action: "Download" | "Share" | "Rating") => {};
 
   const renderFlatListHeader = () => {
     return (
@@ -436,7 +410,9 @@ const MovieDetail = ({ navigation, route }) => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={downLoadThisMovieTv}
+              onPress={() => {
+                showModal("Download");
+              }}
               style={{
                 ...styles.button,
                 backgroundColor: Colors.backgroundColor,
@@ -590,7 +566,7 @@ const MovieDetail = ({ navigation, route }) => {
     );
   };
 
-  const tabBar = (props) => (
+  const tabBar = (props: any) => (
     <MaterialTabBar
       {...props}
       indicatorStyle={{ backgroundColor: Colors.primaryColorLight }}
@@ -617,6 +593,7 @@ const MovieDetail = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeContainer}>
+        <Modal></Modal>
         <Tabs.Container
           renderHeader={renderFlatListHeader}
           headerContainerStyle={{ backgroundColor: Colors.backgroundColor }}
