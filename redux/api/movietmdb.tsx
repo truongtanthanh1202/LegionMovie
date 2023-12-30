@@ -114,3 +114,29 @@ export const fetchSimilarMovies = (id: string) => {
 export const fetchSimilarTVs = (id: string) => {
   return apiCall(`https://api.themoviedb.org/3/tv/${id}/similar`);
 };
+
+export const fetchEpisodesTVs = (id: string) => {
+  // return apiCall(`https://api.themoviedb.org/3/tv/${id}/episode_groups`);
+  return {
+    results: [
+      {
+        id: 1151189,
+        name: "The Log is Taken! Salvage King, Masira!",
+        overview:
+          "Nami's log pose begins to point to the sky, and the crew finds a map of an island named 'Skypiea' on a 200-year-old ship. They compete with the monkey-like Masira's salvage crew while they search for more clues on how to get there.",
+      },
+      {
+        id: 1151190,
+        name: "Monsters Appear! Don't Mess with the Whitebeard Pirates!",
+        overview:
+          "The Straw Hats decide to go to Jaya island to look for information on Skypeia. Meanwhile, Ace suddenly shows up on Buggy's ship; Buggy does not let any of his men attack Ace, fearing Whitebeard's retribution.",
+      },
+      {
+        id: 1151191,
+        name: "Quit Dreaming! Mock Town, the Town of Ridicule!",
+        overview:
+          "Jaya's main town is full of famous pirates that are constantly brawling with each other. Luffy and Zoro have a run-in with a pirate known as 'Bellamy the Hyena,' who ridicules their dreams and beats them up.",
+      },
+    ],
+  };
+};

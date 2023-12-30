@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Modal,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React from "react";
 import styles from "./Style";
@@ -32,13 +33,17 @@ import {
   fetchTvSeriesCreditsInfo,
   fetchSimilarTVs,
   fetchTrailerTVs,
+  fetchEpisodesTVs,
 } from "../../redux/api/movietmdb";
 import { MyListHook } from "../../redux/hook/HandlerMyListHook";
 import TrailerCard from "./TrailerCard";
 import { Tabs, MaterialTabBar } from "react-native-collapsible-tab-view";
 import MovieCard from "../../components/atoms/movie_card";
+import DownLoadVideo from "./modal_popup/DownLoadVideo";
+import GiveRating from "./modal_popup/GiveRating";
+import SocialShare from "./modal_popup/SocialShare";
 import VideoHeader from "./VideoHeader";
-import * as FileSystem from "expo-file-system";
+import EspisodeTVCard from "./EspisodeTVCard";
 
 const mockReviews = [
   {
@@ -89,13 +94,8 @@ const mockReviews = [
 ];
 
 const MovieDetail = ({ navigation, route }) => {
-  const {
-    handlerAddMyListItem,
-    handlerRemoveMyListItem,
-    handlerGetMyListItem,
-    handlerFilterMyListItem,
-    checkDuplicate,
-  } = MyListHook();
+  const { handlerAddMyListItem, handlerRemoveMyListItem, checkDuplicate } =
+    MyListHook();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modalType, setModalType] = React.useState("");
 
@@ -104,6 +104,7 @@ const MovieDetail = ({ navigation, route }) => {
   const [trailer, setTrailer] = React.useState([]);
   const [similarMovies, setSimilarMovies] = React.useState([]);
   const [moviesReviews, setMoviesReviews] = React.useState(mockReviews);
+  const [Episodes, setEpisodes] = React.useState([]);
 
   const { movieItem } = route.params;
   const movieID = movieItem.id;
@@ -117,8 +118,8 @@ const MovieDetail = ({ navigation, route }) => {
   const overview = movieItem.overview;
 
   React.useEffect(() => {
-    console.log("movie name: " + movieName);
-    console.log("tv name: " + tvName);
+    // console.log("movie name: " + movieName);
+    // console.log("tv name: " + tvName);
   }, []);
 
   const isMovieDuplicate = checkDuplicate(movieID);
@@ -155,6 +156,7 @@ const MovieDetail = ({ navigation, route }) => {
       getCastsTvSeriesData();
       getTrailerTVs();
       getSimilarTVs();
+      getEpisodes();
     }
     if (movieName) {
       getCastsMovieData();
@@ -193,15 +195,10 @@ const MovieDetail = ({ navigation, route }) => {
     if (data) setSimilarMovies(data.results);
   };
 
-  const downLoadThisMovieTv = async () => {
-    const result = await FileSystem.downloadAsync(
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      FileSystem.cacheDirectory + movieID + (movieName || tvName)
-    );
-    console.log(result);
+  const getEpisodes = async () => {
+    const data = await fetchEpisodesTVs(movieID);
+    if (data) setEpisodes(data.results);
   };
-
-  const showModal = (action: "Download" | "Share" | "Rating") => {};
 
   const renderFlatListHeader = () => {
     return (
@@ -273,7 +270,13 @@ const MovieDetail = ({ navigation, route }) => {
                   color={isMovieDuplicate ? "white" : Colors.primaryColorLight}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.shadow}>
+              <TouchableOpacity
+                style={styles.shadow}
+                onPress={() => {
+                  setModalType("Share");
+                  setModalVisible(true);
+                }}
+              >
                 <Ionicons name="paper-plane-outline" size={20} color="white" />
               </TouchableOpacity>
             </View>
@@ -292,6 +295,10 @@ const MovieDetail = ({ navigation, route }) => {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
+              }}
+              onPress={() => {
+                setModalType("Rating");
+                setModalVisible(true);
               }}
             >
               <FontAwesome
@@ -411,7 +418,8 @@ const MovieDetail = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                showModal("Download");
+                setModalType("DownLoad");
+                setModalVisible(true);
               }}
               style={{
                 ...styles.button,
@@ -592,13 +600,58 @@ const MovieDetail = ({ navigation, route }) => {
   }
   return (
     <View style={styles.container}>
+      {/* Modal show/hide */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalBlock}>
+              <TouchableOpacity
+                style={styles.modalCloseBtn}
+                onPress={() => setModalVisible(false)}
+              ></TouchableOpacity>
+              {modalType === "DownLoad" && (
+                <DownLoadVideo url="" name={movieName || tvName} id={movieID} />
+              )}
+              {modalType === "Share" && (
+                <SocialShare name={movieName || tvName} />
+              )}
+              {modalType === "Rating" && <GiveRating />}
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
       <SafeAreaView style={styles.safeContainer}>
-        <Modal></Modal>
         <Tabs.Container
           renderHeader={renderFlatListHeader}
           headerContainerStyle={{ backgroundColor: Colors.backgroundColor }}
           renderTabBar={tabBar}
         >
+          {tvName && (
+            <Tabs.Tab name="Episodes">
+              <Tabs.FlatList
+                data={Episodes}
+                keyExtractor={(item) => item.id.toString()}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item, index }) => {
+                  return (
+                    <View style={{ marginVertical: 8 }} key={index}>
+                      <EspisodeTVCard
+                        Info={item}
+                        Poster={backdropPath}
+                      ></EspisodeTVCard>
+                    </View>
+                  );
+                }}
+              />
+            </Tabs.Tab>
+          )}
           <Tabs.Tab name="Trailer">
             {trailer.length > 0 ? (
               <Tabs.FlatList
@@ -622,11 +675,28 @@ const MovieDetail = ({ navigation, route }) => {
                   }}
                 >
                   <Text
-                    style={{ fontSize: 20, color: Colors.primaryColorLight }}
+                    style={{
+                      fontSize: 24,
+                      color: Colors.primaryColorLight,
+                      alignSelf: "center",
+                      fontFamily: "Urbanist_500Medium",
+                      marginTop: 28,
+                      marginBottom: 12,
+                    }}
                   >
                     No Data
                   </Text>
-                  <Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      color: "white",
+                      alignSelf: "center",
+                      fontFamily: "Urbanist_500Medium",
+                      width: 300,
+                      textAlign: "center",
+                      letterSpacing: 0.4,
+                    }}
+                  >
                     {"This Movie/TV series has no trailer data yet :(("}
                   </Text>
                 </View>

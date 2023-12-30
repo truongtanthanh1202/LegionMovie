@@ -53,6 +53,30 @@ const styles = StyleSheet.create({
     letterSpacing: 0.7,
     maxWidth: 80,
   },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  modalBlock: {
+    borderTopRightRadius: 32,
+    borderTopLeftRadius: 32,
+    backgroundColor: Colors.backgroundColor,
+    paddingHorizontal: 28,
+    paddingTop: 12,
+    paddingBottom: 32,
+    width: "100%",
+    alignItems: "center",
+    position: "relative",
+  },
+  modalCloseBtn: {
+    width: 40,
+    height: 6,
+    borderRadius: 8,
+    backgroundColor: "#999",
+    marginBottom: 20,
+  },
 });
 
 export default styles;
