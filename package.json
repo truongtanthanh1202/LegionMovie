@@ -22,10 +22,12 @@
     "axios": "^1.5.1",
     "expo": "~49.0.13",
     "expo-av": "~13.4.1",
+    "expo-file-system": "~15.4.5",
     "expo-font": "~11.4.0",
     "expo-image-picker": "~14.3.2",
     "expo-linking": "~5.0.2",
     "expo-screen-orientation": "~6.0.6",
+    "expo-sharing": "~11.5.0",
     "expo-status-bar": "~1.6.0",
     "expo-video-player": "^2.2.0",
     "lodash": "^4.17.21",
@@ -43,12 +45,12 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "react-native-tab-view": "^3.5.2",
-    "react-native-vector-icons": "^10.0.0",
+    "react-native-vector-icons": "^10.0.3",
+    "react-native-video": "^2.3.1",
+    "react-native-video-player": "^0.14.0",
     "react-native-web": "~0.19.6",
     "react-redux": "^8.1.3",
-    "typescript": "^5.1.3",
-    "expo-file-system": "~15.4.5",
-    "expo-sharing": "~11.5.0"
+    "typescript": "^5.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

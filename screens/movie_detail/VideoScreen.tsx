@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { Colors } from "../../constant/Color";
 import { ResizeMode, Video } from "expo-av";
-import VideoPlayer from "expo-video-player";
+import VideoPlayer from "react-native-rn-videoplayer";
 import { SIZES } from "../../constant/Constant";
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
@@ -22,7 +22,7 @@ const VideoScreen = ({ navigation, route }) => {
   const videoExpoAv = () => {
     return (
       <>
-        <Video
+        {/* <Video
           ref={refVideo}
           style={{
             position: "absolute",
@@ -38,6 +38,14 @@ const VideoScreen = ({ navigation, route }) => {
           resizeMode={ResizeMode.CONTAIN}
           isLooping
           onPlaybackStatusUpdate={() => {}}
+        /> */}
+        <VideoPlayer
+          url={
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+          }
+          autoPlay={true}
+          lockControl={true} //控件锁定功能 v2.0.6增加
+          moreSetting={() => null} //右上角更多按钮 输出null则不显示
         />
       </>
     );

@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { SIZES } from "../../constant/Constant";
 import { Video, ResizeMode } from "expo-av";
-import VideoPlayer from "expo-video-player";
+import VideoPlayer from "react-native-rn-videoplayer";
 
 const VideoHeader = ({ posterPath }) => {
   return (
