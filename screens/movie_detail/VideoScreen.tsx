@@ -46,9 +46,7 @@ const VideoScreen = ({ navigation, route }) => {
         <ApiVideoPlayer
           videoId="vi45umhckSDgTrjedYYTd49y"
           ref={refVideo}
-          onQualityChange={(resolution) => {
-            console.log("resolution", resolution);
-          }}
+          onQualityChange={(resolution) => {}}
         />
         {/* <Button onPress={() => refVideo.current.play()} title="Play" />
         <Button onPress={() => refVideo.current.pause()} title="Pause" /> */}
