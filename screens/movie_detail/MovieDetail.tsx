@@ -141,7 +141,9 @@ const MovieDetail = ({ navigation, route }) => {
   };
 
   const handlerPlayVideo = () => {
-    navigation.navigate("VideoScreen");
+    navigation.navigate("VideoScreen", {
+      id: movieID,
+    });
   };
 
   const handlerToCommentScreen = () => {
