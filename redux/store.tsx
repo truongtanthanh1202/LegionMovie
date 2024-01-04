@@ -4,6 +4,7 @@ import MyListSlice from "./slice/MyListSlice";
 import FilmStoreSlice from "./slice/FilmStoreSlice";
 import AuthenticationSlice from "./slice/AuthenticationSlice";
 import UserProfileSlice from "./slice/UserProfileSlice";
+import FilmDownloadSlice from "./slice/FilmDownloadSlice";
 
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -15,6 +16,7 @@ export const store = configureStore({
     FilmStore: FilmStoreSlice,
     Authentication: AuthenticationSlice,
     UserProfile: UserProfileSlice,
+    FilmDownload: FilmDownloadSlice,
   },
 });
 

@@ -20,20 +20,48 @@ const DownLoadVideo = ({ url, name, id }) => {
   }
 
   const [downloadState, setDownloadState] = React.useState("None"); //None || Downloading || Done
-  const [progressValue, setProgressValue] = React.useState(0.1);
-  const [totalFileSize, setTotalFileSize] = React.useState(20);
+  const [progressValue, setProgressValue] = React.useState(0);
+  const [totalFileSize, setTotalFileSize] = React.useState(0);
+
+  function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return "0 Bytes";
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
 
   const downLoadThisMovieTv = async () => {
-    const result = await FileSystem.downloadAsync(
+    setDownloadState("Downloading");
+
+    const callback = (downloadProgress) => {
+      setTotalFileSize(formatBytes(downloadProgress.totalBytesExpectedToWrite));
+
+      var progress =
+        downloadProgress.totalBytesWritten /
+        downloadProgress.totalBytesExpectedToWrite;
+      progress = progress.toFixed(2) * 100;
+      setProgressValue(progress.toFixed(0));
+    };
+
+    const downloadResumable = FileSystem.createDownloadResumable(
       videoDownloadUrl,
-      FileSystem.cacheDirectory + name + id
-    )
-      .then(({ uri }) => {
-        console.log("Finished downloading to ", uri);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      FileSystem.cacheDirectory + name + id,
+      {},
+      callback
+    );
+
+    try {
+      const { uri } = await downloadResumable.downloadAsync();
+      console.log("Finished downloading to ", uri);
+      setDownloadState("Done");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const cancelDownload = () => {};
@@ -87,7 +115,7 @@ const DownLoadVideo = ({ url, name, id }) => {
             fontSize: 12,
           }}
         >
-          {progressValue} / {totalFileSize} MB
+          {totalFileSize}
         </Text>
         <Text
           style={{
@@ -96,7 +124,7 @@ const DownLoadVideo = ({ url, name, id }) => {
             fontSize: 12,
           }}
         >
-          {((progressValue / totalFileSize) * 100).toFixed(0)}%
+          {progressValue}%
         </Text>
       </View>
       <View
@@ -111,7 +139,7 @@ const DownLoadVideo = ({ url, name, id }) => {
           <View
             style={{
               ...styles.currentProgress,
-              width: `${(progressValue / totalFileSize) * 100}%`,
+              width: `${progressValue}%`,
             }}
           ></View>
         </View>
@@ -141,7 +169,13 @@ const DownLoadVideo = ({ url, name, id }) => {
             ...styles.buttonHide,
             backgroundColor: Colors.primaryColorDark,
           }}
-          onPress={() => {}}
+          onPress={() => {
+            if (downloadState === "None") {
+              downLoadThisMovieTv();
+            } else if (downloadState === "Downloading") {
+              cancelDownload();
+            }
+          }}
         >
           <Text
             style={{ ...styles.textInBtn, fontFamily: "Urbanist_500Medium" }}
