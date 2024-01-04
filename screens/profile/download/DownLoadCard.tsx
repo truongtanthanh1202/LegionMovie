@@ -8,12 +8,20 @@ import {
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
 import { Feather, FontAwesome } from "@expo/vector-icons";
+import { MovieDownloadProperties } from "../../../redux/slice/FilmDownloadSlice";
+import { FilmDownloadHook } from "../../../redux/hook/FilmDownloadHook";
+import * as FileSystem from "expo-file-system";
 
-const DownLoadCard = () => {
+const DownLoadCard = (props: MovieDownloadProperties) => {
+  const { handlerRemoveFilmDownload } = FilmDownloadHook();
   const randomDurationMinutes = Math.floor(Math.random() * 10);
   const randomDurationSeconds = Math.floor(Math.random() * 100);
 
-  const handlerDelete = () => {};
+  const handlerDelete = async () => {
+    console.log("delete film: " + props.local_path);
+    await FileSystem.deleteAsync(props.local_path);
+    handlerRemoveFilmDownload(props.id);
+  };
 
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_700Bold,
@@ -26,10 +34,10 @@ const DownLoadCard = () => {
   }
   return (
     <View style={{ flexDirection: "row", gap: 20 }}>
-      <TouchableOpacity activeOpacity={0.7} onPress={() => {}}>
+      <View>
         <Image
           source={{
-            uri: "https://i.ytimg.com/vi/SZtvRyyQGHM/hqdefault.jpg",
+            uri: `https://image.tmdb.org/t/p/w500/${props.poster_path}`,
           }}
           resizeMode="cover"
           style={styles.ImageTrailer}
@@ -37,7 +45,7 @@ const DownLoadCard = () => {
         <View style={styles.playCircle}>
           <FontAwesome name="play-circle" size={24} color="white" />
         </View>
-      </TouchableOpacity>
+      </View>
       <View
         style={{
           justifyContent: "center",
@@ -52,7 +60,7 @@ const DownLoadCard = () => {
             maxWidth: 230,
           }}
         >
-          {"Movie Downloaded"}
+          {props.name}
         </Text>
         <Text
           style={{
@@ -60,7 +68,7 @@ const DownLoadCard = () => {
             fontFamily: "Urbanist_400Regular",
           }}
         >
-          {`${randomDurationMinutes}m ${randomDurationSeconds}s`}
+          {/* {`${randomDurationMinutes}m ${randomDurationSeconds}s`} */}
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={styles.stateTrailer}>
@@ -71,7 +79,7 @@ const DownLoadCard = () => {
                 fontFamily: "Urbanist_400Regular",
               }}
             >
-              Total Size
+              {`${randomDurationMinutes}m ${randomDurationSeconds}s`}
             </Text>
           </View>
           <TouchableOpacity style={styles.stateTrailer} onPress={handlerDelete}>

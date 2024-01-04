@@ -9,12 +9,21 @@ import React from "react";
 import { Colors } from "../../../constant/Color";
 import * as FileSystem from "expo-file-system";
 import { AntDesign } from "@expo/vector-icons";
+import { FilmDownloadHook } from "../../../redux/hook/FilmDownloadHook";
 
-const DownLoadVideo = ({ url, name, id }) => {
+const DownLoadVideo = ({ url, name, id, poster_path }) => {
+  const { handlerAddFilmDownload } = FilmDownloadHook();
+
+  const mockVideoUrlArr = [
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+  ];
   var videoDownloadUrl = "";
   if (url == "") {
     videoDownloadUrl =
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+      mockVideoUrlArr[Math.floor(Math.random() * mockVideoUrlArr.length)];
   } else {
     videoDownloadUrl = url;
   }
@@ -59,6 +68,13 @@ const DownLoadVideo = ({ url, name, id }) => {
       const { uri } = await downloadResumable.downloadAsync();
       console.log("Finished downloading to ", uri);
       setDownloadState("Done");
+      handlerAddFilmDownload({
+        id: id,
+        poster_path: poster_path,
+        name: name,
+        local_path: uri.toString(),
+        size: totalFileSize,
+      });
     } catch (e) {
       console.error(e);
     }

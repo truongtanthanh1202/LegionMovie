@@ -22,6 +22,7 @@ import ChangePassword from "../screens/profile/sercurity/ChangePassword";
 import EditProfile from "../screens/profile/edit_profile/EditProfile";
 import DownLoad from "../screens/profile/download/DownLoad";
 import DownLoadSetting from "../screens/profile/download/DownLoadSetting";
+import VideoDownloadPlaying from "../screens/profile/download/VideoDownloadPlaying";
 
 import { AuthenticationHook } from "../redux/hook/AuthenticationHook";
 
@@ -49,6 +50,10 @@ const StackNavigator = () => {
             <Stack.Screen name="EditProfile" component={EditProfile} />
             <Stack.Screen name="DownLoad" component={DownLoad} />
             <Stack.Screen name="DownLoadSetting" component={DownLoadSetting} />
+            <Stack.Screen
+              name="VideoDownloadPlaying"
+              component={VideoDownloadPlaying}
+            />
           </>
         ) : (
           <>

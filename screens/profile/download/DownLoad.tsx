@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import React from "react";
 import styles from "./Style";
@@ -15,8 +16,13 @@ import {
   Urbanist_400Regular,
 } from "@expo-google-fonts/urbanist";
 import DownLoadCard from "./DownLoadCard";
+import { FilmDownloadHook } from "../../../redux/hook/FilmDownloadHook";
+import NoData from "../../../assets/svg/NoData";
 
 const DownLoad = ({ navigation }) => {
+  const { getAllFilmDownload } = FilmDownloadHook();
+  const allDownloadItems = getAllFilmDownload();
+  console.log(allDownloadItems);
   let [fontsLoaded, fontError] = useFonts({
     Urbanist_700Bold,
     Urbanist_500Medium,
@@ -66,9 +72,54 @@ const DownLoad = ({ navigation }) => {
         </View>
         {/* Body */}
         <View style={{ marginTop: 36, marginHorizontal: 16, gap: 16 }}>
-          <DownLoadCard />
-          <DownLoadCard />
-          <DownLoadCard />
+          {allDownloadItems.length > 0 ? (
+            <ScrollView>
+              {allDownloadItems.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    key={index}
+                    style={{ marginBottom: 20 }}
+                    onPress={() => {
+                      navigation.navigate("VideoDownloadPlaying", {
+                        localPath: item.local_path,
+                      });
+                    }}
+                  >
+                    <DownLoadCard
+                      id={item.id}
+                      poster_path={item.poster_path}
+                      name={item.name}
+                      local_path={item.local_path}
+                      size={item.size}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          ) : (
+            <View style={styles.emptyContainer}>
+              <View style={{ width: 240, height: 240 }}>
+                <NoData />
+              </View>
+              <Text
+                style={{
+                  ...styles.textEmpty,
+                  fontFamily: "Urbanist_500Medium",
+                }}
+              >
+                Your Download List is Empty
+              </Text>
+              <Text
+                style={{
+                  ...styles.textSubEmpty,
+                  fontFamily: "Urbanist_400Regular",
+                }}
+              >
+                It seems that you haven't download any movies
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </SafeAreaView>

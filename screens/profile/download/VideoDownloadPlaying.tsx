@@ -1,17 +1,14 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  SafeAreaView,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, SafeAreaView } from "react-native";
 import React from "react";
-import { Colors } from "../../constant/Color";
+import { Colors } from "../../../constant/Color";
 import { ResizeMode, Video } from "expo-av";
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
 
-const VideoScreen = ({ navigation, route }) => {
+const VideoDownloadPlaying = ({ navigation, route }) => {
+  const { localPath } = route.params;
+  console.log(localPath);
+
   const handlerGoBack = () => {
     navigation.goBack();
   };
@@ -30,7 +27,7 @@ const VideoScreen = ({ navigation, route }) => {
             right: 0,
           }}
           source={{
-            uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            uri: `${localPath}`,
           }}
           useNativeControls
           resizeMode={ResizeMode.CONTAIN}
@@ -67,7 +64,7 @@ const VideoScreen = ({ navigation, route }) => {
   );
 };
 
-export default VideoScreen;
+export default VideoDownloadPlaying;
 
 const styles = StyleSheet.create({
   container: {

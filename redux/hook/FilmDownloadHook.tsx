@@ -6,7 +6,7 @@ import {
 } from "../slice/FilmDownloadSlice";
 import { MovieDownloadProperties } from "../slice/FilmDownloadSlice";
 
-export const MyListHook = () => {
+export const FilmDownloadHook = () => {
   const dispatch = useAppDispatch();
   const { MovieDownloadItem } = useAppSelector(
     (state: RootState) => state.FilmDownload
@@ -20,8 +20,8 @@ export const MyListHook = () => {
     dispatch(addMovieDownloadItem(movie));
   };
 
-  const handlerRemoveFilmDownload = (movie: MovieDownloadProperties) => {
-    dispatch(removeMovieDownloadItem(movie.id));
+  const handlerRemoveFilmDownload = (id: number) => {
+    dispatch(removeMovieDownloadItem(id));
   };
 
   const checkFilmDownloaded = (id: number) => {

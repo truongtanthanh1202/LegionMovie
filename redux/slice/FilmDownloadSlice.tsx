@@ -3,6 +3,7 @@ export interface MovieDownloadProperties {
   poster_path: string;
   name: string;
   local_path: string;
+  size: any;
 }
 
 import { createSlice } from "@reduxjs/toolkit";

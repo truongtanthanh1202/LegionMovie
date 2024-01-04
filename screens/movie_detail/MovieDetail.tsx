@@ -36,6 +36,7 @@ import {
   fetchEpisodesTVs,
 } from "../../redux/api/movietmdb";
 import { MyListHook } from "../../redux/hook/HandlerMyListHook";
+import { FilmDownloadHook } from "../../redux/hook/FilmDownloadHook";
 import TrailerCard from "./TrailerCard";
 import { Tabs, MaterialTabBar } from "react-native-collapsible-tab-view";
 import MovieCard from "../../components/atoms/movie_card";
@@ -94,8 +95,6 @@ const mockReviews = [
 ];
 
 const MovieDetail = ({ navigation, route }) => {
-  const { handlerAddMyListItem, handlerRemoveMyListItem, checkDuplicate } =
-    MyListHook();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modalType, setModalType] = React.useState("");
 
@@ -105,6 +104,10 @@ const MovieDetail = ({ navigation, route }) => {
   const [similarMovies, setSimilarMovies] = React.useState([]);
   const [moviesReviews, setMoviesReviews] = React.useState(mockReviews);
   const [Episodes, setEpisodes] = React.useState([]);
+
+  const { checkFilmDownloaded } = FilmDownloadHook();
+  const { handlerAddMyListItem, handlerRemoveMyListItem, checkDuplicate } =
+    MyListHook();
 
   const { movieItem } = route.params;
   const movieID = movieItem.id;
@@ -117,11 +120,7 @@ const MovieDetail = ({ navigation, route }) => {
   const genre_ids = movieItem.genre_ids;
   const overview = movieItem.overview;
 
-  React.useEffect(() => {
-    // console.log("movie name: " + movieName);
-    // console.log("tv name: " + tvName);
-  }, []);
-
+  const isMovieDownload = checkFilmDownloaded(movieID);
   const isMovieDuplicate = checkDuplicate(movieID);
   const handerAddThisFilmToMylist = () => {
     if (isMovieDuplicate) {
@@ -418,8 +417,10 @@ const MovieDetail = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                setModalType("DownLoad");
-                setModalVisible(true);
+                if (isMovieDownload) {
+                  setModalType("DownLoad");
+                  setModalVisible(true);
+                }
               }}
               style={{
                 ...styles.button,
@@ -441,7 +442,7 @@ const MovieDetail = ({ navigation, route }) => {
                     color: Colors.primaryColorDark,
                   }}
                 >
-                  Download
+                  {isMovieDownload ? "Download" : "Downloaded"}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -617,7 +618,12 @@ const MovieDetail = ({ navigation, route }) => {
                 onPress={() => setModalVisible(false)}
               ></TouchableOpacity>
               {modalType === "DownLoad" && (
-                <DownLoadVideo url="" name={movieName || tvName} id={movieID} />
+                <DownLoadVideo
+                  url=""
+                  name={movieName || tvName}
+                  id={movieID}
+                  poster_path={backdropPath}
+                />
               )}
               {modalType === "Share" && (
                 <SocialShare name={movieName || tvName} />

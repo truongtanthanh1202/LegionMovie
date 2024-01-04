@@ -34,6 +34,25 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     gap: 16,
   },
+  emptyContainer: {
+    backgroundColor: Colors.backgroundColor,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textEmpty: {
+    fontSize: 24,
+    color: Colors.primaryColorLight,
+    letterSpacing: 0.4,
+    marginTop: 20,
+  },
+  textSubEmpty: {
+    marginTop: 14,
+    fontSize: 16,
+    color: "white",
+    width: 280,
+    textAlign: "center",
+    lineHeight: 20,
+  },
 });
 
 export default styles;
