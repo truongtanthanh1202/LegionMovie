@@ -12,33 +12,56 @@ import VideoPlayer from "expo-video-player";
 import { SIZES } from "../../constant/Constant";
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
+import WebView from "react-native-webview";
 
 const VideoScreen = ({ navigation, route }) => {
   const handlerGoBack = () => {
     navigation.goBack();
   };
+  const id = route.params?.id;
+  console.log(id);
 
   const refVideo = React.useRef(null);
   const videoExpoAv = () => {
     return (
       <>
-        <Video
-          ref={refVideo}
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-          }}
-          source={{
-            uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-          }}
-          useNativeControls
-          resizeMode={ResizeMode.CONTAIN}
-          isLooping
-          onPlaybackStatusUpdate={() => {}}
-        />
+        {id ? (
+          <WebView
+            source={{
+              uri: "https://vidsrc.to/embed/movie/" + id,
+            }}
+            style={{
+              flex: 1,
+            }}
+            onShouldStartLoadWithRequest={(request) => {
+              if (
+                request.url.startsWith("https://vidsrc.to/embed/movie/" + id)
+              ) {
+                return true;
+              } else {
+                return false;
+              }
+            }}
+          />
+        ) : (
+          <Video
+            ref={refVideo}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+            source={{
+              uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            }}
+            useNativeControls
+            resizeMode={ResizeMode.CONTAIN}
+            isLooping
+            onPlaybackStatusUpdate={() => {}}
+          />
+        )}
       </>
     );
   };
