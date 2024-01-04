@@ -29,7 +29,7 @@ const VideoHeader = ({ posterPath }) => {
           shouldPlay: false,
           resizeMode: ResizeMode.CONTAIN,
           source: {
-            uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            uri: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
           },
         }}
       />

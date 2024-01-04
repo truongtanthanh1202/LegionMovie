@@ -26,8 +26,10 @@ import {
 } from "@expo-google-fonts/urbanist";
 import ForgotPassword2 from "../../assets/svg/ForgotPassword2";
 import ForgotPassword3 from "../../assets/svg/ForgotPassword3";
+import { AuthenticationHook } from "../../redux/hook/AuthenticationHook";
 
 const Forgot3 = ({ navigation }) => {
+  const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -47,7 +49,7 @@ const Forgot3 = ({ navigation }) => {
   };
 
   const handlerToHome = () => {
-    navigation.navigate("BottomTab");
+    handlerSetIsSignIn(true);
   };
 
   return (
