@@ -30,8 +30,8 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
   const { handlerGetIsSignIn, handlerSetIsSignIn } = AuthenticationHook();
-  // const isSignIn = handlerGetIsSignIn();
-  const isSignIn = true;
+  const isSignIn = handlerGetIsSignIn();
+  // const isSignIn = true;
 
   return (
     <NavigationContainer>
